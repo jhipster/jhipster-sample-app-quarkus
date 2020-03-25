@@ -1,0 +1,26 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "balance",
+            "fieldType": "BigDecimal"
+        }
+    ],
+    "changelogDate": "20190429064702",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "bank_account",
+    "databaseType": "sql",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}
