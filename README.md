@@ -1,6 +1,6 @@
 # jhipsterSampleApplication
 
-This application was generated using JHipster 6.8.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.8.0](https://www.jhipster.tech/documentation-archive/v6.8.0).
+This application was generated using JHipster 6.8.0 and JHipster Quarkus 0.0.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.8.0](https://www.jhipster.tech/documentation-archive/v6.8.0).
 
 ## Development
 
@@ -89,11 +89,13 @@ will generate few files:
 
 ## Building for production
 
-### Packaging as jar
+### Packaging as thin jar
 
 To build the final jar and optimize the jhipsterSampleApplication application for production, run:
 
-    ./mvnw -Pprod clean verify
+```
+./mvnw -Pprod clean package
+```
 
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 To ensure everything worked, run:
@@ -104,11 +106,26 @@ Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
 
 Refer to [Using JHipster in production][] for more details.
 
-### Packaging as war
+### Packaging as native executable
 
-To package your application as a war in order to deploy it to an application server, run:
+_Targeting your Operation System_
+In order to build a native image locally, your need to have [GraalVM](https://www.graalvm.org/) installed and `GRAALVM_HOME` defined.
+You can use the `native` profile as follow to build native executable.
 
-    ./mvnw -Pprod,war clean verify
+```
+./mvnw package -Pnative
+```
+
+Keep in mind that the generated native executable is dependent on your Operating System.
+
+_Targeting a container environment_
+If you plan to run your application in a container, run:
+
+```
+./mvnw package -Dnative -Dquarkus.native.container-build=true
+```
+
+It will use a Docker container with GraalVM installed and produce an 64 bit Linux executable.
 
 ## Testing
 
