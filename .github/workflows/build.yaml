@@ -11,7 +11,7 @@ jobs:
             matrix:
                 node_version: [12.14.0]
                 os: [ubuntu-latest]
-                java_version: 1.8
+                java_version: '1.8'
         steps:
             - uses: actions/checkout@v1
             - uses: actions/setup-java@v1
