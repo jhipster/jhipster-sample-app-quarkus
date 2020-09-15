@@ -2,6 +2,9 @@ package io.github.jhipster.sample.service.dto;
 
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,6 +16,7 @@ import javax.validation.constraints.Size;
 /**
  * A DTO representing a user, with his authorities.
  */
+@RegisterForReflection
 public class UserDTO {
     public Long id;
 
