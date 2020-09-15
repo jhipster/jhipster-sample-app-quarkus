@@ -3,6 +3,7 @@ package io.github.jhipster.sample.web.rest;
 import io.github.jhipster.sample.security.jwt.TokenProvider;
 import io.github.jhipster.sample.service.AuthenticationService;
 import io.github.jhipster.sample.web.rest.vm.LoginVM;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.quarkus.security.runtime.QuarkusSecurityIdentity;
 import javax.annotation.security.PermitAll;
 import javax.enterprise.context.RequestScoped;
@@ -55,6 +56,7 @@ public class UserJWTController {
     /**
      * Object to return as body in JWT Authentication.
      */
+    @RegisterForReflection
     public static class JWTToken {
         @JsonbProperty("id_token")
         public String idToken;

@@ -1,6 +1,7 @@
 package io.github.jhipster.sample.domain;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "jhi_authority")
 //@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@RegisterForReflection
 public class Authority extends PanacheEntityBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
