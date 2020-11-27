@@ -126,6 +126,7 @@ public class OperationResource {
         return response.build();
     }
 
+
     /**
      * {@code GET  /operations/:id} : get the "id" operation.
      *

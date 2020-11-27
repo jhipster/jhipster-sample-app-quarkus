@@ -99,14 +99,14 @@ public class BankAccountResource {
 
     /**
      * {@code GET  /bank-accounts} : get all the bankAccounts.
-     *
-     * @return the {@link Response} with status {@code 200 (OK)} and the list of bankAccounts in body.
+     *     * @return the {@link Response} with status {@code 200 (OK)} and the list of bankAccounts in body.
      */
     @GET
     public List<BankAccount> getAllBankAccounts() {
         log.debug("REST request to get all BankAccounts");
         return BankAccount.findAll().list();
     }
+
 
     /**
      * {@code GET  /bank-accounts/:id} : get the "id" bankAccount.
