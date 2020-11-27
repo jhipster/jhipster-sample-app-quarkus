@@ -2,6 +2,7 @@ package io.github.jhipster.sample.domain;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import javax.json.bind.annotation.JsonbTransient;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -18,6 +19,7 @@ import java.util.Optional;
  */
 @Entity
 @Table(name = "operation")
+@RegisterForReflection
 public class Operation extends PanacheEntityBase implements Serializable {
 
     private static final long serialVersionUID = 1L;

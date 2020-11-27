@@ -99,14 +99,14 @@ public class LabelResource {
 
     /**
      * {@code GET  /labels} : get all the labels.
-     *
-     * @return the {@link Response} with status {@code 200 (OK)} and the list of labels in body.
+     *     * @return the {@link Response} with status {@code 200 (OK)} and the list of labels in body.
      */
     @GET
     public List<Label> getAllLabels() {
         log.debug("REST request to get all Labels");
         return Label.findAll().list();
     }
+
 
     /**
      * {@code GET  /labels/:id} : get the "id" label.
