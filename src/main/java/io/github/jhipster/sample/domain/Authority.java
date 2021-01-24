@@ -10,13 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.persistence.*;
 
 /**
  * An authority (a security role).
  */
 @Entity
 @Table(name = "jhi_authority")
-//@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cacheable
 @RegisterForReflection
 public class Authority extends PanacheEntityBase implements Serializable {
     private static final long serialVersionUID = 1L;

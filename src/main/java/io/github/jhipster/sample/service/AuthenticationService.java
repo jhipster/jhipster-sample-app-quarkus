@@ -23,6 +23,7 @@ public class AuthenticationService {
 
     final BCryptPasswordHasher passwordHasher;
 
+
     @Inject
     public AuthenticationService(BCryptPasswordHasher passwordHasher) {
         this.passwordHasher = passwordHasher;

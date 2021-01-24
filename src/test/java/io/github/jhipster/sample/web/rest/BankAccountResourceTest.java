@@ -14,9 +14,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import liquibase.Liquibase;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import javax.inject.Inject;
 
@@ -37,6 +35,7 @@ public class BankAccountResourceTest {
 
     private static final BigDecimal DEFAULT_BALANCE = new BigDecimal(1);
     private static final BigDecimal UPDATED_BALANCE = new BigDecimal(2);
+
 
 
     String adminToken;
@@ -67,6 +66,8 @@ public class BankAccountResourceTest {
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * Create an entity for this test.

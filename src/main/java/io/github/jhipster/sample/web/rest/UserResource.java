@@ -132,6 +132,23 @@ public class UserResource {
     }
 
     /**
+     * {@code DELETE /users/:login} : delete the "login" User.
+     *
+     * @param login the login of the user to delete.
+     * @return the {@link Response} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DELETE
+    @Path("/{login}")
+    @RolesAllowed(AuthoritiesConstants.ADMIN)
+    public Response deleteUser(@PathParam("login") String login) {
+        log.debug("REST request to delete User: {}", login);
+        userService.deleteUser(login);
+        Response.ResponseBuilder response = Response.noContent();
+        HeaderUtil.createAlert(applicationName, "userManagement.deleted", login).forEach(response::header);
+        return response.build();
+    }
+
+    /**
      * {@code GET /users} : get all users.
      *
      * @param pagination the pagination information.
@@ -171,21 +188,4 @@ public class UserResource {
         return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(UserDTO::new));
     }
 
-    /**
-     * {@code DELETE /users/:login} : delete the "login" User.
-     *
-     * @param login the login of the user to delete.
-     * @return the {@link Response} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DELETE
-    //    @Path("/{login:" + Constants.LOGIN_REGEX + "}")
-    @Path("/{login}")
-    @RolesAllowed(AuthoritiesConstants.ADMIN)
-    public Response deleteUser(@PathParam("login") String login) {
-        log.debug("REST request to delete User: {}", login);
-        userService.deleteUser(login);
-        Response.ResponseBuilder response = Response.noContent();
-        HeaderUtil.createAlert(applicationName, "userManagement.deleted", login).forEach(response::header);
-        return response.build();
-    }
 }

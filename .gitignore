@@ -2,7 +2,7 @@
 # Project Specific
 ######################
 /src/main/webapp/content/css/main.css
-/target/classes/static/**
+/target/classes/META-INF/resources**
 /src/test/javascript/coverage/
 
 ######################
@@ -53,8 +53,9 @@ local.properties
 
 # STS-specific
 /.sts4-cache/*
+
 ######################
-# Intellij
+# IntelliJ
 ######################
 .idea/
 *.iml

@@ -3,6 +3,8 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import javax.json.bind.annotation.JsonbTransient;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -19,6 +21,7 @@ import java.util.Optional;
  */
 @Entity
 @Table(name = "operation")
+@Cacheable
 @RegisterForReflection
 public class Operation extends PanacheEntityBase implements Serializable {
 
@@ -45,6 +48,7 @@ public class Operation extends PanacheEntityBase implements Serializable {
     public BankAccount bankAccount;
 
     @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(name = "operation_label",
                joinColumns = @JoinColumn(name = "operation_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "label_id", referencedColumnName = "id"))

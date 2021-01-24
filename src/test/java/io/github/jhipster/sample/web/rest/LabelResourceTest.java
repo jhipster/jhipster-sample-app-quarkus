@@ -14,9 +14,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import liquibase.Liquibase;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import javax.inject.Inject;
 
@@ -33,6 +31,7 @@ public class LabelResourceTest {
 
     private static final String DEFAULT_LABEL = "AAAAAAAAAA";
     private static final String UPDATED_LABEL = "BBBBBBBBBB";
+
 
 
     String adminToken;
@@ -63,6 +62,8 @@ public class LabelResourceTest {
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * Create an entity for this test.

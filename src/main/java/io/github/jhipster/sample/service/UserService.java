@@ -25,7 +25,9 @@ import org.slf4j.LoggerFactory;
 public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
+
     final BCryptPasswordHasher passwordHasher;
+
 
     @Inject
     public UserService(BCryptPasswordHasher passwordHasher) {
@@ -41,9 +43,23 @@ public class UserService {
                     // activate given user for the registration key.
                     user.activated = true;
                     user.activationKey = null;
-                    //                this.clearUserCaches(user);
                     log.debug("Activated user: {}", user);
                     return user;
+                }
+            );
+    }
+
+    public void changePassword(String login, String currentClearTextPassword, String newPassword) {
+        User
+            .findOneByLogin(login)
+            .ifPresent(
+                user -> {
+                    String currentEncryptedPassword = user.password;
+                    if (!passwordHasher.checkPassword(currentClearTextPassword, currentEncryptedPassword)) {
+                        throw new InvalidPasswordException();
+                    }
+                    user.password = passwordHasher.hash(newPassword);
+                    log.debug("Changed password for User: {}", user);
                 }
             );
     }
@@ -58,7 +74,6 @@ public class UserService {
                     user.password = passwordHasher.hash(newPassword);
                     user.resetKey = null;
                     user.resetDate = null;
-                    //                this.clearUserCaches(user);
                     return user;
                 }
             );
@@ -72,7 +87,6 @@ public class UserService {
                 user -> {
                     user.resetKey = RandomUtil.generateResetKey();
                     user.resetDate = Instant.now();
-                    //                this.clearUserCaches(user);
                     return user;
                 }
             );
@@ -99,11 +113,10 @@ public class UserService {
                     }
                 }
             );
-        var encryptedPassword = passwordHasher.hash(password);
         var newUser = new User();
         newUser.login = userDTO.login.toLowerCase();
         // new user gets initially a generated password
-        newUser.password = encryptedPassword;
+        newUser.password = passwordHasher.hash(password);
         newUser.firstName = userDTO.firstName;
         newUser.lastName = userDTO.lastName;
         if (userDTO.email != null) {
@@ -119,7 +132,6 @@ public class UserService {
         Authority.<Authority>findByIdOptional(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.authorities = authorities;
         User.persist(newUser);
-        //        this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
@@ -129,7 +141,6 @@ public class UserService {
             return false;
         }
         User.delete("id", existingUser.id);
-        //        this.clearUserCaches(existingUser);
         return true;
     }
 
@@ -147,50 +158,30 @@ public class UserService {
         } else {
             user.langKey = userDTO.langKey;
         }
-        String encryptedPassword = passwordHasher.hash(RandomUtil.generatePassword());
-        user.password = encryptedPassword;
+        user.password = passwordHasher.hash(RandomUtil.generatePassword());
         user.resetKey = RandomUtil.generateResetKey();
         user.resetDate = Instant.now();
         user.activated = true;
         if (userDTO.authorities != null) {
-            Set<Authority> authorities = userDTO
+            user.authorities = userDTO
                 .authorities.stream()
                 .map(authority -> Authority.<Authority>findByIdOptional(authority))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());
-            user.authorities = authorities;
         }
         User.persist(user);
-        //        this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
         return user;
     }
 
-    /**
-     * Update basic information (first name, last name, email, language) for the current user.
-     *
-     * @param login     the login to find the user to update.
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
-     */
-    public void updateUser(String login, String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void deleteUser(String login) {
         User
             .findOneByLogin(login)
             .ifPresent(
                 user -> {
-                    user.firstName = firstName;
-                    user.lastName = lastName;
-                    if (email != null) {
-                        user.email = email.toLowerCase();
-                    }
-                    user.langKey = langKey;
-                    user.imageUrl = imageUrl;
-                    //                this.clearUserCaches(user);
-                    log.debug("Changed Information for User: {}", user);
+                    User.delete("id", user.id);
+                    log.debug("Deleted User: {}", user);
                 }
             );
     }
@@ -223,7 +214,6 @@ public class UserService {
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .forEach(managedAuthorities::add);
-                    //                this.clearUserCaches(user);
                     log.debug("Changed Information for User: {}", user);
                     return user;
                 }
@@ -231,31 +221,29 @@ public class UserService {
             .map(UserDTO::new);
     }
 
-    public void deleteUser(String login) {
+    /**
+     * Update basic information (first name, last name, email, language) for the current user.
+     *
+     * @param login     the login to find the user to update.
+     * @param firstName first name of user.
+     * @param lastName  last name of user.
+     * @param email     email id of user.
+     * @param langKey   language key.
+     * @param imageUrl  image URL of user.
+     */
+    public void updateUser(String login, String firstName, String lastName, String email, String langKey, String imageUrl) {
         User
             .findOneByLogin(login)
             .ifPresent(
                 user -> {
-                    User.delete("id", user.id);
-                    //            this.clearUserCaches(user);
-                    log.debug("Deleted User: {}", user);
-                }
-            );
-    }
-
-    public void changePassword(String login, String currentClearTextPassword, String newPassword) {
-        User
-            .findOneByLogin(login)
-            .ifPresent(
-                user -> {
-                    String currentEncryptedPassword = user.password;
-                    if (!passwordHasher.checkPassword(currentClearTextPassword, currentEncryptedPassword)) {
-                        throw new InvalidPasswordException();
+                    user.firstName = firstName;
+                    user.lastName = lastName;
+                    if (email != null) {
+                        user.email = email.toLowerCase();
                     }
-                    String encryptedPassword = passwordHasher.hash(newPassword);
-                    user.password = encryptedPassword;
-                    //                this.clearUserCaches(user);
-                    log.debug("Changed password for User: {}", user);
+                    user.langKey = langKey;
+                    user.imageUrl = imageUrl;
+                    log.debug("Changed Information for User: {}", user);
                 }
             );
     }
@@ -271,4 +259,6 @@ public class UserService {
     public List<String> getAuthorities() {
         return Authority.<Authority>streamAll().map(authority -> authority.name).collect(Collectors.toList());
     }
+
+
 }

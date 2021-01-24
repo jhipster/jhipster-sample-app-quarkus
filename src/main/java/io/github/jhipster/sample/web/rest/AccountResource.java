@@ -12,6 +12,7 @@ import io.github.jhipster.sample.web.rest.errors.EmailNotFoundException;
 import io.github.jhipster.sample.web.rest.errors.LoginAlreadyUsedException;
 import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
+
 import io.quarkus.security.Authenticated;
 import java.security.Principal;
 import java.util.Optional;
@@ -53,6 +54,47 @@ public class AccountResource {
     public AccountResource(MailService mailService, UserService userService) {
         this.mailService = mailService;
         this.userService = userService;
+    }
+
+    /**
+     * {@code GET /account} : get the current user.
+     *
+     * @return the current user.
+     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
+     */
+    @GET
+    @Path("/account")
+    @Authenticated
+    public UserDTO getAccount(@Context SecurityContext ctx) {
+        return userService
+            .getUserWithAuthoritiesByLogin(ctx.getUserPrincipal().getName())
+            .map(UserDTO::new)
+            .orElseThrow(() -> new AccountResourceException("User could not be found"));
+    }
+
+    /**
+     * {@code POST /account} : update the current user information.
+     *
+     * @param userDTO the current user information.
+     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
+     * @throws RuntimeException          {@code 500 (Internal Server Error)} if the user login wasn't found.
+     */
+    @POST
+    @Path("/account")
+    public Response saveAccount(@Valid UserDTO userDTO, @Context SecurityContext ctx) {
+        var userLogin = Optional
+            .ofNullable(ctx.getUserPrincipal().getName())
+            .orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        var existingUser = User.findOneByEmailIgnoreCase(userDTO.email);
+        if (existingUser.isPresent() && (!existingUser.get().login.equalsIgnoreCase(userLogin))) {
+            throw new EmailAlreadyUsedException();
+        }
+        var user = User.findOneByLogin(userLogin);
+        if (!user.isPresent()) {
+            throw new AccountResourceException("User could not be found");
+        }
+        userService.updateUser(userLogin, userDTO.firstName, userDTO.lastName, userDTO.email, userDTO.langKey, userDTO.imageUrl);
+        return Response.ok().build();
     }
 
     /**
@@ -109,47 +151,6 @@ public class AccountResource {
     public String isAuthenticated(@Context SecurityContext ctx) {
         log.debug("REST request to check if the current user is authenticated");
         return Optional.ofNullable(ctx.getUserPrincipal()).map(Principal::getName).orElse("");
-    }
-
-    /**
-     * {@code GET /account} : get the current user.
-     *
-     * @return the current user.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
-     */
-    @GET
-    @Path("/account")
-    @Authenticated
-    public UserDTO getAccount(@Context SecurityContext ctx) {
-        return userService
-            .getUserWithAuthoritiesByLogin(ctx.getUserPrincipal().getName())
-            .map(UserDTO::new)
-            .orElseThrow(() -> new AccountResourceException("User could not be found"));
-    }
-
-    /**
-     * {@code POST /account} : update the current user information.
-     *
-     * @param userDTO the current user information.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws RuntimeException          {@code 500 (Internal Server Error)} if the user login wasn't found.
-     */
-    @POST
-    @Path("/account")
-    public Response saveAccount(@Valid UserDTO userDTO, @Context SecurityContext ctx) {
-        var userLogin = Optional
-            .ofNullable(ctx.getUserPrincipal().getName())
-            .orElseThrow(() -> new AccountResourceException("Current user login not found"));
-        var existingUser = User.findOneByEmailIgnoreCase(userDTO.email);
-        if (existingUser.isPresent() && (!existingUser.get().login.equalsIgnoreCase(userLogin))) {
-            throw new EmailAlreadyUsedException();
-        }
-        var user = User.findOneByLogin(userLogin);
-        if (!user.isPresent()) {
-            throw new AccountResourceException("User could not be found");
-        }
-        userService.updateUser(userLogin, userDTO.firstName, userDTO.lastName, userDTO.email, userDTO.langKey, userDTO.imageUrl);
-        return Response.ok().build();
     }
 
     /**

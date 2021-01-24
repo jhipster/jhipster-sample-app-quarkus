@@ -17,9 +17,9 @@
                 </tr>
             </thead>
             <tbody *ngIf="health">
-                <tr *ngFor="let componentHealth of health.components | keys">
+                <tr *ngFor="let componentHealth of health.checks | keys">
                     <td>
-                        {{ 'health.indicator.' + componentHealth.key | translate }}
+                        <span class="text-capitalize">{{ componentHealth.value.name }}</span>
                     </td>
                     <td class="text-center">
                         <span class="badge" [ngClass]="getBadgeClass(componentHealth.value.status)" jhiTranslate="{{ 'health.status.' + componentHealth.value.status }}">

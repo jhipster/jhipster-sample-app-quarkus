@@ -18,7 +18,7 @@
     "testFrameworks": ["gatling", "protractor"],
     "languages": ["en"],
     "serverPort": 8080,
-    "jhipsterVersion": "6.8.0",
+    "jhipsterVersion": "6.10.5",
     "enableSocialSignIn": false,
     "useSass": true,
     "jhiPrefix": "jhi",
@@ -33,7 +33,7 @@
     "otherModules": [
       {
         "name": "generator-jhipster-quarkus",
-        "version": "0.1.6"
+        "version": "0.2.1"
       }
     ],
     "entitySuffix": "",
@@ -42,7 +42,7 @@
     "blueprints": [
       {
         "name": "generator-jhipster-quarkus",
-        "version": "0.1.6"
+        "version": "0.2.1"
       }
     ],
     "embeddableLaunchScript": false,

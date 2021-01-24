@@ -10,20 +10,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
+import org.hibernate.annotations.BatchSize;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 
 /**
  * A user.
  */
 @Entity
 @Table(name = "jhi_user")
-//@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cacheable
 public class User extends PanacheEntityBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -37,10 +39,10 @@ public class User extends PanacheEntityBase implements Serializable {
     @Column(length = 50, unique = true, nullable = false)
     public String login;
 
-    @JsonbTransient
     @NotNull
     @Size(min = 60, max = 60)
     @Column(name = "password_hash", length = 60, nullable = false)
+    @JsonbTransient
     public String password;
 
     @Size(max = 50)
@@ -81,15 +83,15 @@ public class User extends PanacheEntityBase implements Serializable {
     @Column(name = "reset_date")
     public Instant resetDate = null;
 
-    @JsonbTransient
     @ManyToMany
     @JoinTable(
         name = "jhi_user_authority",
         joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
         inverseJoinColumns = { @JoinColumn(name = "authority_name", referencedColumnName = "name") }
     )
-    //    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     @BatchSize(size = 20)
+    @JsonbTransient
     public Set<Authority> authorities = new HashSet<>();
 
     //To move to an audit mechanism
@@ -187,13 +189,11 @@ public class User extends PanacheEntityBase implements Serializable {
 
     public static Optional<User> findOneWithAuthoritiesByLogin(String login) {
         return find("FROM User u LEFT JOIN FETCH u.authorities WHERE u.login = ?1", login)
-            //            .withHint(QueryHints.HINT_CACHEABLE, "true")
             .firstResultOptional();
     }
 
     public static Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email) {
         return find("FROM User u LEFT JOIN FETCH u.authorities WHERE LOWER(u.login) = LOWER(?1)", email)
-            //            .withHint(QueryHints.HINT_CACHEABLE, "true")
             .firstResultOptional();
     }
 

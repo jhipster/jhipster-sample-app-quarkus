@@ -3,6 +3,8 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import javax.json.bind.annotation.JsonbTransient;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -17,6 +19,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "bank_account")
+@Cacheable
 @RegisterForReflection
 public class BankAccount extends PanacheEntityBase implements Serializable {
 
@@ -40,6 +43,7 @@ public class BankAccount extends PanacheEntityBase implements Serializable {
     public User user;
 
     @OneToMany(mappedBy = "bankAccount")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     public Set<Operation> operations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

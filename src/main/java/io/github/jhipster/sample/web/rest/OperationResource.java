@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.jhipster.sample.service.Paged;
 import io.github.jhipster.sample.web.rest.vm.PageRequestVM;
+import io.github.jhipster.sample.web.rest.vm.SortRequestVM;
 import io.github.jhipster.sample.web.util.PaginationUtil;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -109,9 +110,10 @@ public class OperationResource {
      */
     @GET
     @Transactional
-    public Response getAllOperations(@BeanParam PageRequestVM pageRequest, @Context UriInfo uriInfo, @QueryParam(value = "eagerload") boolean eagerload) {
+    public Response getAllOperations(@BeanParam PageRequestVM pageRequest, @BeanParam SortRequestVM sortRequest, @Context UriInfo uriInfo, @QueryParam(value = "eagerload") boolean eagerload) {
         log.debug("REST request to get a page of Operations");
         var page = pageRequest.toPage();
+        var sort = sortRequest.toSort();
         Paged<Operation> result;
         if (eagerload) {
             var operations = Operation.findAllWithEagerRelationships().page(page).list();
@@ -119,7 +121,7 @@ public class OperationResource {
             var pageCount = Operation.findAll().page(page).pageCount();
             result = new Paged<>(page.index, page.size, totalCount, pageCount, operations);
         } else {
-            result = new Paged<>(Operation.findAll().page(page));
+            result = new Paged<>(Operation.findAll(sort).page(page));
         }
         var response = Response.ok().entity(result.content);
         response = PaginationUtil.withPaginationInfo(response, uriInfo, result);

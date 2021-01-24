@@ -19,11 +19,11 @@ import javax.inject.Inject;
 import javax.ws.rs.core.HttpHeaders;
 
 import liquibase.Liquibase;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 @QuarkusTest
 public class UserJWTControllerTest {
+
     @Inject
     LiquibaseFactory liquibaseFactory;
 

@@ -10,7 +10,7 @@ export type HealthKey = 'diskSpace' | 'mail' | 'ping' | 'db';
 
 export interface Health {
   status: HealthStatus;
-  components: {
+  checks: {
     [key in HealthKey]?: HealthDetails;
   };
 }

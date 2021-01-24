@@ -3,6 +3,8 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import javax.json.bind.annotation.JsonbTransient;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -16,6 +18,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "label")
+@Cacheable
 @RegisterForReflection
 public class Label extends PanacheEntityBase implements Serializable {
 
@@ -31,6 +34,7 @@ public class Label extends PanacheEntityBase implements Serializable {
     public String label;
 
     @ManyToMany(mappedBy = "labels")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonbTransient
     public Set<Operation> operations = new HashSet<>();
 

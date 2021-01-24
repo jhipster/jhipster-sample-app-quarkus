@@ -3,8 +3,8 @@ package io.github.jhipster.sample;
 import static io.github.jhipster.sample.config.Constants.DATE_TIME_FORMAT;
 import static io.restassured.RestAssured.given;
 import static javax.ws.rs.core.Response.Status.OK;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.jhipster.sample.web.rest.vm.LoginVM;
 import io.restassured.mapper.ObjectMapper;
@@ -19,7 +19,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
 
-
 /**
  * Utility class for testing REST controllers.
  */
@@ -32,7 +31,6 @@ public final class TestUtil {
     public static String formatDateTime(Temporal temporal) {
         return DATE_TIME_FORMATTER.format(temporal);
     }
-
 
     /**
      * Verifies the equals/hashcode contract on the domain object.
