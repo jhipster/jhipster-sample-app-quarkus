@@ -33,7 +33,7 @@
     "otherModules": [
       {
         "name": "generator-jhipster-quarkus",
-        "version": "0.2.1"
+        "version": "1.0.0"
       }
     ],
     "entitySuffix": "",
@@ -42,7 +42,7 @@
     "blueprints": [
       {
         "name": "generator-jhipster-quarkus",
-        "version": "0.2.1"
+        "version": "1.0.0"
       }
     ],
     "embeddableLaunchScript": false,
