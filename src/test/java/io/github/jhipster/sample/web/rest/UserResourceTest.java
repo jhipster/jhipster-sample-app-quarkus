@@ -122,7 +122,7 @@ public class UserResourceTest {
 
     @Test
     public void createUserWithExistingId() {
-        managedUserVM.id = 1L;
+        managedUserVM.id = 1l;
         // An entity with an existing ID cannot be created, so this API call must fail
         given()
             .auth()
@@ -583,7 +583,7 @@ public class UserResourceTest {
     public void testUserDTOtoUser() {
         var userMapper = new UserMapper();
         var userDTO = new UserDTO();
-        userDTO.id = 1L;
+        userDTO.id = 1l;
         userDTO.login = DEFAULT_LOGIN;
         userDTO.firstName = DEFAULT_FIRSTNAME;
         userDTO.lastName = DEFAULT_LASTNAME;
@@ -596,7 +596,7 @@ public class UserResourceTest {
         userDTO.authorities = Set.of(AuthoritiesConstants.USER);
 
         User user = userMapper.userDTOToUser(userDTO);
-        assertThat(user.id).isEqualTo(1L);
+        assertThat(user.id).isEqualTo(1l);
         assertThat(user.login).isEqualTo(DEFAULT_LOGIN);
         assertThat(user.firstName).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(user.lastName).isEqualTo(DEFAULT_LASTNAME);
@@ -615,7 +615,7 @@ public class UserResourceTest {
     public void testUserToUserDTO() {
         var userMapper = new UserMapper();
         var user = new User();
-        user.id = 1L;
+        user.id = 1l;
         user.login = DEFAULT_LOGIN;
         user.password = DEFAULT_PASSWORD;
         user.firstName = DEFAULT_FIRSTNAME;
@@ -634,7 +634,7 @@ public class UserResourceTest {
 
         UserDTO userDTO = userMapper.userToUserDTO(user);
 
-        assertThat(userDTO.id).isEqualTo(1L);
+        assertThat(userDTO.id).isEqualTo(1l);
         assertThat(userDTO.login).isEqualTo(DEFAULT_LOGIN);
         assertThat(userDTO.firstName).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(userDTO.lastName).isEqualTo(DEFAULT_LASTNAME);

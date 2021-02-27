@@ -1,6 +1,6 @@
 # jhipsterSampleApplication
 
-This application was generated using JHipster 6.10.5 and JHipster Quarkus 1.0.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.10.5](https://www.jhipster.tech/documentation-archive/v6.10.5).
+This application was generated using JHipster 6.10.5 and JHipster Quarkus 1.1.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.10.5](https://www.jhipster.tech/documentation-archive/v6.10.5).
 
 ## Development
 
@@ -100,7 +100,7 @@ To build the final jar and optimize the jhipsterSampleApplication application fo
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 To ensure everything worked, run:
 
-    java -jar target/*.jar
+    java -jar target/quarkus-app/*.jar
 
 Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
 

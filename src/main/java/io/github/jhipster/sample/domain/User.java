@@ -2,11 +2,11 @@ package io.github.jhipster.sample.domain;
 
 import io.github.jhipster.sample.config.Constants;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import io.quarkus.panache.common.Page;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
+import io.quarkus.panache.common.Page;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

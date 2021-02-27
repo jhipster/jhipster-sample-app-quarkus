@@ -4,7 +4,6 @@ import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;

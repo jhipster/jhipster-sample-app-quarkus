@@ -9,17 +9,17 @@ import static org.hamcrest.Matchers.*;
 
 import io.github.jhipster.sample.TestUtil;
 import io.github.jhipster.sample.domain.Label;
-import io.quarkus.liquibase.LiquibaseFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import liquibase.Liquibase;
+import io.quarkus.liquibase.LiquibaseFactory;
 import org.junit.jupiter.api.*;
 
 import javax.inject.Inject;
 
-    import java.util.List;
-
+import java.util.List;
+    
 @QuarkusTest
 public class LabelResourceTest {
 
