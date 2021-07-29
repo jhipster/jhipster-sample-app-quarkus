@@ -1,32 +1,48 @@
 package io.github.jhipster.sample.config;
 
-import io.quarkus.arc.config.ConfigProperties;
+import io.smallrye.config.ConfigMapping;
 
-@ConfigProperties(prefix = "jhipster")
-public class JHipsterProperties {
-    public Security security;
-    public Mail mail;
+@ConfigMapping(prefix = "jhipster")
+public interface JHipsterProperties {
 
-    public static class Security {
-        public Authentication authentication;
+    Info info();
 
-        public static class Authentication {
-            public Jwt jwt;
+    interface Info {
 
-            public static class Jwt {
-                public String issuer;
-                public long tokenValidityInSeconds;
-                public long tokenValidityInSecondsForRememberMe;
-                public PrivateKey privateKey;
+        Swagger swagger();
 
-                public static class PrivateKey {
-                    public String location;
+        interface Swagger {
+            Boolean enable();
+        }
+    }
+
+    Security security();
+
+    interface Security {
+
+        Authentication authentication();
+
+        interface Authentication {
+
+            Jwt jwt();
+
+            interface Jwt {
+
+               String issuer();
+               long tokenValidityInSeconds();
+               long tokenValidityInSecondsForRememberMe();
+               PrivateKey privateKey();
+
+               interface PrivateKey {
+                   String location();
                 }
             }
         }
     }
 
-    public static class Mail {
-        public String baseUrl;
+    Mail mail();
+
+    interface Mail {
+        String baseUrl();
     }
 }

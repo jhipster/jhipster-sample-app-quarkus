@@ -4,6 +4,7 @@ import io.github.jhipster.sample.security.jwt.TokenProvider;
 import io.github.jhipster.sample.service.AuthenticationService;
 import io.github.jhipster.sample.web.rest.vm.LoginVM;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import io.quarkus.security.UnauthorizedException;
 import io.quarkus.security.runtime.QuarkusSecurityIdentity;
 import javax.annotation.security.PermitAll;
 import javax.enterprise.context.RequestScoped;
@@ -49,7 +50,7 @@ public class UserJWTController {
             String jwt = tokenProvider.createToken(identity, rememberMe);
             return Response.ok().entity(new JWTToken(jwt)).header("Authorization", "Bearer " + jwt).build();
         } catch (SecurityException e) {
-            return Response.status(401).build();
+            throw new UnauthorizedException();
         }
     }
 

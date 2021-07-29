@@ -27,6 +27,7 @@ import javax.ws.rs.core.HttpHeaders;
 
 import liquibase.Liquibase;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.*;
 
 @QuarkusTest
@@ -58,6 +59,9 @@ public class UserResourceTest {
 
     @Inject
     LiquibaseFactory liquibaseFactory;
+
+    @ConfigProperty(name = "application.name")
+    String applicationName;
 
     @BeforeAll
     static void jsonMapper() {
@@ -136,7 +140,15 @@ public class UserResourceTest {
             .when()
             .post("/api/users")
             .then()
-            .statusCode(BAD_REQUEST.getStatusCode());
+            .statusCode(BAD_REQUEST.getStatusCode())
+            .header("X-" + applicationName + "-error", is("error.idexists"))
+            .header("X-" + applicationName + "-params", is("userManagement"))
+            .contentType("application/problem+json")
+            .body("title", is("A new user cannot already have an ID"))
+            .body("entityName", is("userManagement"))
+            .body("errorKey", is("idexists"))
+            .body("message", is("error.idexists"))
+            .body("params", is("userManagement"));
     }
 
     @Test
@@ -176,7 +188,15 @@ public class UserResourceTest {
             .when()
             .post("/api/users")
             .then()
-            .statusCode(BAD_REQUEST.getStatusCode());
+            .statusCode(BAD_REQUEST.getStatusCode())
+            .header("X-" + applicationName + "-error", is("error.userexists"))
+            .header("X-" + applicationName + "-params", is("userManagement"))
+            .contentType("application/problem+json")
+            .body("title", is("Login name already used!"))
+            .body("entityName", is("userManagement"))
+            .body("errorKey", is("userexists"))
+            .body("message", is("error.userexists"))
+            .body("params", is("userManagement"));
     }
 
     @Test
@@ -215,7 +235,15 @@ public class UserResourceTest {
             .when()
             .post("/api/users")
             .then()
-            .statusCode(BAD_REQUEST.getStatusCode());
+            .statusCode(BAD_REQUEST.getStatusCode())
+            .header("X-" + applicationName + "-error", is("error.userexists"))
+            .header("X-" + applicationName + "-params", is("userManagement"))
+            .contentType("application/problem+json")
+            .body("title", is("Login name already used!"))
+            .body("entityName", is("userManagement"))
+            .body("errorKey", is("userexists"))
+            .body("message", is("error.userexists"))
+            .body("params", is("userManagement"));
     }
 
     @Test
@@ -461,7 +489,15 @@ public class UserResourceTest {
             .when()
             .put("/api/users")
             .then()
-            .statusCode(BAD_REQUEST.getStatusCode());
+            .statusCode(BAD_REQUEST.getStatusCode())
+            .header("X-" + applicationName + "-error", is("error.emailexists"))
+            .header("X-" + applicationName + "-params", is("userManagement"))
+            .contentType("application/problem+json")
+            .body("title", is("Email is already in use!"))
+            .body("entityName", is("userManagement"))
+            .body("errorKey", is("emailexists"))
+            .body("message", is("error.emailexists"))
+            .body("params", is("userManagement"));
     }
 
     @Test
@@ -529,7 +565,15 @@ public class UserResourceTest {
             .when()
             .put("/api/users")
             .then()
-            .statusCode(BAD_REQUEST.getStatusCode());
+            .statusCode(BAD_REQUEST.getStatusCode())
+            .header("X-" + applicationName + "-error", is("error.userexists"))
+            .header("X-" + applicationName + "-params", is("userManagement"))
+            .contentType("application/problem+json")
+            .body("title", is("Login name already used!"))
+            .body("entityName", is("userManagement"))
+            .body("errorKey", is("userexists"))
+            .body("message", is("error.userexists"))
+            .body("params", is("userManagement"));
     }
 
     @Test

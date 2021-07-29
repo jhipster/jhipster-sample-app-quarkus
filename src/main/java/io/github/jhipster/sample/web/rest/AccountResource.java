@@ -9,6 +9,7 @@ import io.github.jhipster.sample.service.dto.PasswordChangeDTO;
 import io.github.jhipster.sample.service.dto.UserDTO;
 import io.github.jhipster.sample.web.rest.errors.EmailAlreadyUsedException;
 import io.github.jhipster.sample.web.rest.errors.EmailNotFoundException;
+import io.github.jhipster.sample.web.rest.errors.InvalidPasswordWebException;
 import io.github.jhipster.sample.web.rest.errors.LoginAlreadyUsedException;
 import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
@@ -101,7 +102,7 @@ public class AccountResource {
      * {@code POST /register} : register the user.
      *
      * @param managedUserVM the managed user View Model.
-     * @throws InvalidPasswordException  {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws InvalidPasswordWebException  {@code 400 (Bad Request)} if the password is incorrect.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
      */
@@ -110,7 +111,7 @@ public class AccountResource {
     @PermitAll
     public CompletionStage<Response> registerAccount(@Valid ManagedUserVM managedUserVM) {
         if (!checkPasswordLength(managedUserVM.password)) {
-            throw new InvalidPasswordException();
+            throw new InvalidPasswordWebException();
         }
         try {
             var user = userService.registerUser(managedUserVM, managedUserVM.password);
@@ -157,7 +158,7 @@ public class AccountResource {
      * {@code POST /account/change-password} : changes the current user's password.
      *
      * @param passwordChangeDto current and new password.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
+     * @throws InvalidPasswordWebException {@code 400 (Bad Request)} if the new password is incorrect.
      */
     @POST
     @Path("/account/change-password")
@@ -166,9 +167,13 @@ public class AccountResource {
             .ofNullable(ctx.getUserPrincipal().getName())
             .orElseThrow(() -> new AccountResourceException("Current user login not found"));
         if (!checkPasswordLength(passwordChangeDto.newPassword)) {
-            throw new InvalidPasswordException();
+            throw new InvalidPasswordWebException();
         }
-        userService.changePassword(userLogin, passwordChangeDto.currentPassword, passwordChangeDto.newPassword);
+        try {
+            userService.changePassword(userLogin, passwordChangeDto.currentPassword, passwordChangeDto.newPassword);
+        } catch (InvalidPasswordException e) {
+            throw new InvalidPasswordWebException();
+        }
         return Response.ok().build();
     }
 
@@ -190,14 +195,14 @@ public class AccountResource {
      * {@code POST /account/reset-password/finish} : Finish to reset the password of the user.
      *
      * @param keyAndPassword the generated key and the new password.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws InvalidPasswordWebException {@code 400 (Bad Request)} if the password is incorrect.
      * @throws RuntimeException         {@code 500 (Internal Server Error)} if the password could not be reset.
      */
     @POST
     @Path("/account/reset-password/finish")
     public Response finishPasswordReset(KeyAndPasswordVM keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.newPassword)) {
-            throw new InvalidPasswordException();
+            throw new InvalidPasswordWebException();
         }
         var user = userService.completePasswordReset(keyAndPassword.newPassword, keyAndPassword.key);
 
