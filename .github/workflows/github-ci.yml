@@ -28,8 +28,6 @@ jobs:
               run: sudo /etc/init.d/mysql stop
             - name: Install node.js packages
               run: |
-                  pwd
-                  ls -l
                   npm ci
             - name: Run backend test
               run: ./mvnw -ntp clean test -P-webpack
