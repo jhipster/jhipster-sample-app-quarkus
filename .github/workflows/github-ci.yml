@@ -10,7 +10,7 @@ jobs:
             JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                   node-version: 16
@@ -27,7 +27,9 @@ jobs:
             - name: Stop MySQL server
               run: sudo /etc/init.d/mysql stop
             - name: Install node.js packages
-              run: npm ci
+              run: |
+                  pwd
+                  npm ci
             - name: Run backend test
               run: ./mvnw -ntp clean test -P-webpack
             - name: Run frontend test
