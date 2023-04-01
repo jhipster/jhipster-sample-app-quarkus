@@ -22,7 +22,6 @@ jobs:
                   distribution: 'adopt'
                   java-version: '11.x'
             - uses: graalvm/setup-graalvm@v1
-              id: graalvm
               with:
                  version: '22.3.0'
                  java-version: '11'
@@ -31,11 +30,9 @@ jobs:
             - name: Stop MySQL server
               run: sudo /etc/init.d/mysql stop
             - name: Install node.js packages
-              run: npm install
+              run: npm ci
             - name: Run backend test
-              run: |
-                  chmod +x mvnw
-                  ./mvnw -ntp clean verify -P-webpack
+              run: ./mvnw -ntp clean test -P-webpack
             - name: Run frontend test
               run: npm run test
             - name: Analyze code with SonarQube
@@ -49,6 +46,4 @@ jobs:
             - name: Package application
               run: ./mvnw -ntp package -Pprod -DskipTests
             - name: Build Native Image and run Integration tests
-              if: steps.graalvm.outcome == 'success'
-              id: native
               run: ./mvnw -ntp verify -Pnative
