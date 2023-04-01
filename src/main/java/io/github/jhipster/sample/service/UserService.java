@@ -23,11 +23,10 @@ import org.slf4j.LoggerFactory;
 @ApplicationScoped
 @Transactional
 public class UserService {
+
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
-
     final BCryptPasswordHasher passwordHasher;
-
 
     @Inject
     public UserService(BCryptPasswordHasher passwordHasher) {
@@ -38,30 +37,26 @@ public class UserService {
         log.debug("Activating user for activation key {}", key);
         return User
             .findOneByActivationKey(key)
-            .map(
-                user -> {
-                    // activate given user for the registration key.
-                    user.activated = true;
-                    user.activationKey = null;
-                    log.debug("Activated user: {}", user);
-                    return user;
-                }
-            );
+            .map(user -> {
+                // activate given user for the registration key.
+                user.activated = true;
+                user.activationKey = null;
+                log.debug("Activated user: {}", user);
+                return user;
+            });
     }
 
     public void changePassword(String login, String currentClearTextPassword, String newPassword) {
         User
             .findOneByLogin(login)
-            .ifPresent(
-                user -> {
-                    String currentEncryptedPassword = user.password;
-                    if (!passwordHasher.checkPassword(currentClearTextPassword, currentEncryptedPassword)) {
-                        throw new InvalidPasswordException();
-                    }
-                    user.password = passwordHasher.hash(newPassword);
-                    log.debug("Changed password for User: {}", user);
+            .ifPresent(user -> {
+                String currentEncryptedPassword = user.password;
+                if (!passwordHasher.checkPassword(currentClearTextPassword, currentEncryptedPassword)) {
+                    throw new InvalidPasswordException();
                 }
-            );
+                user.password = passwordHasher.hash(newPassword);
+                log.debug("Changed password for User: {}", user);
+            });
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
@@ -69,50 +64,42 @@ public class UserService {
         return User
             .findOneByResetKey(key)
             .filter(user -> user.resetDate.isAfter(Instant.now().minusSeconds(86400)))
-            .map(
-                user -> {
-                    user.password = passwordHasher.hash(newPassword);
-                    user.resetKey = null;
-                    user.resetDate = null;
-                    return user;
-                }
-            );
+            .map(user -> {
+                user.password = passwordHasher.hash(newPassword);
+                user.resetKey = null;
+                user.resetDate = null;
+                return user;
+            });
     }
 
     public Optional<User> requestPasswordReset(String mail) {
         return User
             .findOneByEmailIgnoreCase(mail)
             .filter(user -> user.activated)
-            .map(
-                user -> {
-                    user.resetKey = RandomUtil.generateResetKey();
-                    user.resetDate = Instant.now();
-                    return user;
-                }
-            );
+            .map(user -> {
+                user.resetKey = RandomUtil.generateResetKey();
+                user.resetDate = Instant.now();
+                return user;
+            });
     }
 
     public User registerUser(UserDTO userDTO, String password) {
         User
             .findOneByLogin(userDTO.login.toLowerCase())
-            .ifPresent(
-                existingUser -> {
-                    var removed = removeNonActivatedUser(existingUser);
-                    if (!removed) {
-                        throw new UsernameAlreadyUsedException();
-                    }
+            .ifPresent(existingUser -> {
+                var removed = removeNonActivatedUser(existingUser);
+                if (!removed) {
+                    throw new UsernameAlreadyUsedException();
                 }
-            );
+            });
         User
             .findOneByEmailIgnoreCase(userDTO.email)
-            .ifPresent(
-                existingUser -> {
-                    var removed = removeNonActivatedUser(existingUser);
-                    if (!removed) {
-                        throw new EmailAlreadyUsedException();
-                    }
+            .ifPresent(existingUser -> {
+                var removed = removeNonActivatedUser(existingUser);
+                if (!removed) {
+                    throw new EmailAlreadyUsedException();
                 }
-            );
+            });
         var newUser = new User();
         newUser.login = userDTO.login.toLowerCase();
         // new user gets initially a generated password
@@ -163,12 +150,13 @@ public class UserService {
         user.resetDate = Instant.now();
         user.activated = true;
         if (userDTO.authorities != null) {
-            user.authorities = userDTO
-                .authorities.stream()
-                .map(authority -> Authority.<Authority>findByIdOptional(authority))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toSet());
+            user.authorities =
+                userDTO.authorities
+                    .stream()
+                    .map(authority -> Authority.<Authority>findByIdOptional(authority))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toSet());
         }
         User.persist(user);
         log.debug("Created Information for User: {}", user);
@@ -178,12 +166,10 @@ public class UserService {
     public void deleteUser(String login) {
         User
             .findOneByLogin(login)
-            .ifPresent(
-                user -> {
-                    User.delete("id", user.id);
-                    log.debug("Deleted User: {}", user);
-                }
-            );
+            .ifPresent(user -> {
+                User.delete("id", user.id);
+                log.debug("Deleted User: {}", user);
+            });
     }
 
     /**
@@ -195,29 +181,27 @@ public class UserService {
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
         return User
             .<User>findByIdOptional(userDTO.id)
-            .map(
-                user -> {
-                    user.login = userDTO.login.toLowerCase();
-                    user.firstName = userDTO.firstName;
-                    user.lastName = userDTO.lastName;
-                    if (userDTO.email != null) {
-                        user.email = userDTO.email.toLowerCase();
-                    }
-                    user.imageUrl = userDTO.imageUrl;
-                    user.activated = userDTO.activated;
-                    user.langKey = userDTO.langKey;
-                    Set<Authority> managedAuthorities = user.authorities;
-                    managedAuthorities.clear();
-                    userDTO
-                        .authorities.stream()
-                        .map(authority -> Authority.<Authority>findByIdOptional(authority))
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .forEach(managedAuthorities::add);
-                    log.debug("Changed Information for User: {}", user);
-                    return user;
+            .map(user -> {
+                user.login = userDTO.login.toLowerCase();
+                user.firstName = userDTO.firstName;
+                user.lastName = userDTO.lastName;
+                if (userDTO.email != null) {
+                    user.email = userDTO.email.toLowerCase();
                 }
-            )
+                user.imageUrl = userDTO.imageUrl;
+                user.activated = userDTO.activated;
+                user.langKey = userDTO.langKey;
+                Set<Authority> managedAuthorities = user.authorities;
+                managedAuthorities.clear();
+                userDTO.authorities
+                    .stream()
+                    .map(authority -> Authority.<Authority>findByIdOptional(authority))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .forEach(managedAuthorities::add);
+                log.debug("Changed Information for User: {}", user);
+                return user;
+            })
             .map(UserDTO::new);
     }
 
@@ -234,18 +218,16 @@ public class UserService {
     public void updateUser(String login, String firstName, String lastName, String email, String langKey, String imageUrl) {
         User
             .findOneByLogin(login)
-            .ifPresent(
-                user -> {
-                    user.firstName = firstName;
-                    user.lastName = lastName;
-                    if (email != null) {
-                        user.email = email.toLowerCase();
-                    }
-                    user.langKey = langKey;
-                    user.imageUrl = imageUrl;
-                    log.debug("Changed Information for User: {}", user);
+            .ifPresent(user -> {
+                user.firstName = firstName;
+                user.lastName = lastName;
+                if (email != null) {
+                    user.email = email.toLowerCase();
                 }
-            );
+                user.langKey = langKey;
+                user.imageUrl = imageUrl;
+                log.debug("Changed Information for User: {}", user);
+            });
     }
 
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
@@ -259,6 +241,4 @@ public class UserService {
     public List<String> getAuthorities() {
         return Authority.<Authority>streamAll().map(authority -> authority.name).collect(Collectors.toList());
     }
-
-
 }

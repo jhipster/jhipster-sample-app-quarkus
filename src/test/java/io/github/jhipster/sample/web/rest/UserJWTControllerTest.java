@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.ws.rs.core.HttpHeaders;
-
 import liquibase.Liquibase;
 import org.junit.jupiter.api.*;
 

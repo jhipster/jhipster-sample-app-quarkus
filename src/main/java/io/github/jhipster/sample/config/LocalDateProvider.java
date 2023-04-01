@@ -1,12 +1,12 @@
 package io.github.jhipster.sample.config;
 
-import javax.ws.rs.ext.ParamConverter;
-import javax.ws.rs.ext.ParamConverterProvider;
-import javax.ws.rs.ext.Provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.ws.rs.ext.ParamConverter;
+import javax.ws.rs.ext.ParamConverterProvider;
+import javax.ws.rs.ext.Provider;
 
 @Provider
 public class LocalDateProvider implements ParamConverterProvider {
@@ -15,7 +15,7 @@ public class LocalDateProvider implements ParamConverterProvider {
 
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
-        if(!rawType.equals(LocalDate.class)){
+        if (!rawType.equals(LocalDate.class)) {
             return null;
         }
         return new ParamConverter<>() {

@@ -6,19 +6,16 @@ import io.github.jhipster.sample.domain.BankAccount;
 import io.github.jhipster.sample.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.sample.web.util.HeaderUtil;
 import io.github.jhipster.sample.web.util.ResponseUtil;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.util.List;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.List;
-import java.util.Optional;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * REST controller for managing {@link io.github.jhipster.sample.domain.BankAccount}.
@@ -36,8 +33,6 @@ public class BankAccountResource {
     @ConfigProperty(name = "application.name")
     String applicationName;
 
-
-    
     /**
      * {@code POST  /bank-accounts} : Create a new bankAccount.
      *
@@ -66,8 +61,9 @@ public class BankAccountResource {
      * or with status {@code 500 (Internal Server Error)} if the bankAccount couldn't be updated.
      */
     @PUT
+    @Path("/{id}")
     @Transactional
-    public Response updateBankAccount(@Valid BankAccount bankAccount) {
+    public Response updateBankAccount(@Valid BankAccount bankAccount, @PathParam("id") Long id) {
         log.debug("REST request to update BankAccount : {}", bankAccount);
         if (bankAccount.id == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -89,9 +85,11 @@ public class BankAccountResource {
     @Transactional
     public Response deleteBankAccount(@PathParam("id") Long id) {
         log.debug("REST request to delete BankAccount : {}", id);
-        BankAccount.findByIdOptional(id).ifPresent(bankAccount -> {
-            bankAccount.delete();
-        });
+        BankAccount
+            .findByIdOptional(id)
+            .ifPresent(bankAccount -> {
+                bankAccount.delete();
+            });
         var response = Response.noContent();
         HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()).forEach(response::header);
         return response.build();
@@ -107,7 +105,6 @@ public class BankAccountResource {
         return BankAccount.findAll().list();
     }
 
-
     /**
      * {@code GET  /bank-accounts/:id} : get the "id" bankAccount.
      *
@@ -116,7 +113,6 @@ public class BankAccountResource {
      */
     @GET
     @Path("/{id}")
-
     public Response getBankAccount(@PathParam("id") Long id) {
         log.debug("REST request to get BankAccount : {}", id);
         Optional<BankAccount> bankAccount = BankAccount.findByIdOptional(id);

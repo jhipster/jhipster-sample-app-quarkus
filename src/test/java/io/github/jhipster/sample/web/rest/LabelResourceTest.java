@@ -9,30 +9,24 @@ import static org.hamcrest.Matchers.*;
 
 import io.github.jhipster.sample.TestUtil;
 import io.github.jhipster.sample.domain.Label;
+import io.quarkus.liquibase.LiquibaseFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
+import java.util.List;
+import javax.inject.Inject;
 import liquibase.Liquibase;
-import io.quarkus.liquibase.LiquibaseFactory;
 import org.junit.jupiter.api.*;
 
-import javax.inject.Inject;
-
-import java.util.List;
-    
 @QuarkusTest
 public class LabelResourceTest {
 
-    private static final TypeRef<Label> ENTITY_TYPE = new TypeRef<>() {
-    };
+    private static final TypeRef<Label> ENTITY_TYPE = new TypeRef<>() {};
 
-    private static final TypeRef<List<Label>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {
-    };
+    private static final TypeRef<List<Label>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {};
 
     private static final String DEFAULT_LABEL = "AAAAAAAAAA";
     private static final String UPDATED_LABEL = "BBBBBBBBBB";
-
-
 
     String adminToken;
 
@@ -63,8 +57,6 @@ public class LabelResourceTest {
         }
     }
 
-
-
     /**
      * Create an entity for this test.
      * <p>
@@ -94,22 +86,25 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Create the Label
-        label = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(label)
-            .when()
-            .post("/api/labels")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        label =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(label)
+                .when()
+                .post("/api/labels")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         // Validate the Label in the database
         var labelList = given()
@@ -122,7 +117,8 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(labelList).hasSize(databaseSizeBeforeCreate + 1);
         var testLabel = labelList.stream().filter(it -> label.id.equals(it.id)).findFirst().get();
@@ -141,7 +137,8 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Create the Label with an existing ID
@@ -171,7 +168,8 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(labelList).hasSize(databaseSizeBeforeCreate);
     }
@@ -188,7 +186,8 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // set the field null
@@ -218,7 +217,8 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(labelList).hasSize(databaseSizeBeforeTest);
     }
@@ -226,18 +226,20 @@ public class LabelResourceTest {
     @Test
     public void updateLabel() {
         // Initialize the database
-        label = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(label)
-            .when()
-            .post("/api/labels")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        label =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(label)
+                .when()
+                .post("/api/labels")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         var databaseSizeBeforeUpdate = given()
             .auth()
@@ -249,7 +251,8 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Get the label
@@ -263,7 +266,9 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().body().as(ENTITY_TYPE);
+            .extract()
+            .body()
+            .as(ENTITY_TYPE);
 
         // Update the label
         updatedLabel.label = UPDATED_LABEL;
@@ -276,7 +281,7 @@ public class LabelResourceTest {
             .accept(APPLICATION_JSON)
             .body(updatedLabel)
             .when()
-            .put("/api/labels")
+            .put("/api/labels/" + label.id)
             .then()
             .statusCode(OK.getStatusCode());
 
@@ -291,7 +296,8 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(labelList).hasSize(databaseSizeBeforeUpdate);
         var testLabel = labelList.stream().filter(it -> updatedLabel.id.equals(it.id)).findFirst().get();
@@ -310,7 +316,8 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
@@ -322,7 +329,7 @@ public class LabelResourceTest {
             .accept(APPLICATION_JSON)
             .body(label)
             .when()
-            .put("/api/labels")
+            .put("/api/labels/" + Long.MAX_VALUE)
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
@@ -337,7 +344,8 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(labelList).hasSize(databaseSizeBeforeUpdate);
     }
@@ -345,18 +353,20 @@ public class LabelResourceTest {
     @Test
     public void deleteLabel() {
         // Initialize the database
-        label = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(label)
-            .when()
-            .post("/api/labels")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        label =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(label)
+                .when()
+                .post("/api/labels")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         var databaseSizeBeforeDelete = given()
             .auth()
@@ -368,7 +378,8 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Delete the label
@@ -393,7 +404,8 @@ public class LabelResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(labelList).hasSize(databaseSizeBeforeDelete - 1);
     }
@@ -401,18 +413,20 @@ public class LabelResourceTest {
     @Test
     public void getAllLabels() {
         // Initialize the database
-        label = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(label)
-            .when()
-            .post("/api/labels")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        label =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(label)
+                .when()
+                .post("/api/labels")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         // Get all the labelList
         given()
@@ -432,31 +446,33 @@ public class LabelResourceTest {
     @Test
     public void getLabel() {
         // Initialize the database
-        label = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(label)
-            .when()
-            .post("/api/labels")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
-
-        var response = // Get the label
+        label =
             given()
                 .auth()
                 .preemptive()
                 .oauth2(adminToken)
-                .accept(APPLICATION_JSON)
-                .when()
-                .get("/api/labels/{id}", label.id)
-                .then()
-                .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ENTITY_TYPE);
+                .accept(APPLICATION_JSON)
+                .body(label)
+                .when()
+                .post("/api/labels")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
+
+        var response = given() // Get the label
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .accept(APPLICATION_JSON)
+            .when()
+            .get("/api/labels/{id}", label.id)
+            .then()
+            .statusCode(OK.getStatusCode())
+            .contentType(APPLICATION_JSON)
+            .extract()
+            .as(ENTITY_TYPE);
 
         // Get the label
         given()
@@ -470,8 +486,7 @@ public class LabelResourceTest {
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
             .body("id", is(label.id.intValue()))
-            
-                .body("label", is(DEFAULT_LABEL));
+            .body("label", is(DEFAULT_LABEL));
     }
 
     @Test

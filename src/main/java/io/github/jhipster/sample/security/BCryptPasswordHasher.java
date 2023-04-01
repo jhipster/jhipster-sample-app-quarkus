@@ -17,6 +17,7 @@ import org.wildfly.security.password.util.ModularCrypt;
 
 @ApplicationScoped
 public class BCryptPasswordHasher {
+
     private static final WildFlyElytronPasswordProvider provider = new WildFlyElytronPasswordProvider();
     public static final int DEFAULT_ITERATION_COUNT = 10;
 

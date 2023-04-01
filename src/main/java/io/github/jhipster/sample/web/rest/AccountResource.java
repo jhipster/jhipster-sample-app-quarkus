@@ -13,7 +13,6 @@ import io.github.jhipster.sample.web.rest.errors.InvalidPasswordWebException;
 import io.github.jhipster.sample.web.rest.errors.LoginAlreadyUsedException;
 import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
-
 import io.quarkus.security.Authenticated;
 import java.security.Principal;
 import java.util.Optional;
@@ -38,6 +37,7 @@ import org.slf4j.LoggerFactory;
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestScoped
 public class AccountResource {
+
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     private static class AccountResourceException extends RuntimeException {
@@ -181,13 +181,14 @@ public class AccountResource {
      * {@code POST /account/reset-password/init} : Send an email to reset the password of the user.
      *
      * @param mail the mail of the user.
-     * @throws EmailNotFoundException {@code 400 (Bad Request)} if the email address is not registered.
      */
     @POST
     @Path("/account/reset-password/init")
     @Consumes(MediaType.TEXT_PLAIN)
     public Response requestPasswordReset(String mail) {
-        mailService.sendPasswordResetMail(userService.requestPasswordReset(mail).orElseThrow(EmailNotFoundException::new));
+        userService
+            .requestPasswordReset(mail)
+            .ifPresentOrElse(mailService::sendPasswordResetMail, () -> log.warn("Password reset requested for non existing mail"));
         return Response.ok().build();
     }
 

@@ -6,19 +6,16 @@ import io.github.jhipster.sample.domain.Label;
 import io.github.jhipster.sample.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.sample.web.util.HeaderUtil;
 import io.github.jhipster.sample.web.util.ResponseUtil;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.util.List;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.List;
-import java.util.Optional;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * REST controller for managing {@link io.github.jhipster.sample.domain.Label}.
@@ -36,8 +33,6 @@ public class LabelResource {
     @ConfigProperty(name = "application.name")
     String applicationName;
 
-
-    
     /**
      * {@code POST  /labels} : Create a new label.
      *
@@ -66,8 +61,9 @@ public class LabelResource {
      * or with status {@code 500 (Internal Server Error)} if the label couldn't be updated.
      */
     @PUT
+    @Path("/{id}")
     @Transactional
-    public Response updateLabel(@Valid Label label) {
+    public Response updateLabel(@Valid Label label, @PathParam("id") Long id) {
         log.debug("REST request to update Label : {}", label);
         if (label.id == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -89,9 +85,11 @@ public class LabelResource {
     @Transactional
     public Response deleteLabel(@PathParam("id") Long id) {
         log.debug("REST request to delete Label : {}", id);
-        Label.findByIdOptional(id).ifPresent(label -> {
-            label.delete();
-        });
+        Label
+            .findByIdOptional(id)
+            .ifPresent(label -> {
+                label.delete();
+            });
         var response = Response.noContent();
         HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()).forEach(response::header);
         return response.build();
@@ -107,7 +105,6 @@ public class LabelResource {
         return Label.findAll().list();
     }
 
-
     /**
      * {@code GET  /labels/:id} : get the "id" label.
      *
@@ -116,7 +113,6 @@ public class LabelResource {
      */
     @GET
     @Path("/{id}")
-
     public Response getLabel(@PathParam("id") Long id) {
         log.debug("REST request to get Label : {}", id);
         Optional<Label> label = Label.findByIdOptional(id);

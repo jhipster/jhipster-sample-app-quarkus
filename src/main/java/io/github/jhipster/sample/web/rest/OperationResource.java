@@ -3,26 +3,23 @@ package io.github.jhipster.sample.web.rest;
 import static javax.ws.rs.core.UriBuilder.fromPath;
 
 import io.github.jhipster.sample.domain.Operation;
-import io.github.jhipster.sample.web.rest.errors.BadRequestAlertException;
-import io.github.jhipster.sample.web.util.HeaderUtil;
-import io.github.jhipster.sample.web.util.ResponseUtil;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import io.github.jhipster.sample.service.Paged;
+import io.github.jhipster.sample.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.sample.web.rest.vm.PageRequestVM;
 import io.github.jhipster.sample.web.rest.vm.SortRequestVM;
+import io.github.jhipster.sample.web.util.HeaderUtil;
 import io.github.jhipster.sample.web.util.PaginationUtil;
-
+import io.github.jhipster.sample.web.util.ResponseUtil;
+import java.util.List;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.List;
-import java.util.Optional;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * REST controller for managing {@link io.github.jhipster.sample.domain.Operation}.
@@ -40,8 +37,6 @@ public class OperationResource {
     @ConfigProperty(name = "application.name")
     String applicationName;
 
-
-    
     /**
      * {@code POST  /operations} : Create a new operation.
      *
@@ -70,8 +65,9 @@ public class OperationResource {
      * or with status {@code 500 (Internal Server Error)} if the operation couldn't be updated.
      */
     @PUT
+    @Path("/{id}")
     @Transactional
-    public Response updateOperation(@Valid Operation operation) {
+    public Response updateOperation(@Valid Operation operation, @PathParam("id") Long id) {
         log.debug("REST request to update Operation : {}", operation);
         if (operation.id == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -93,9 +89,11 @@ public class OperationResource {
     @Transactional
     public Response deleteOperation(@PathParam("id") Long id) {
         log.debug("REST request to delete Operation : {}", id);
-        Operation.findByIdOptional(id).ifPresent(operation -> {
-            operation.delete();
-        });
+        Operation
+            .findByIdOptional(id)
+            .ifPresent(operation -> {
+                operation.delete();
+            });
         var response = Response.noContent();
         HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()).forEach(response::header);
         return response.build();
@@ -110,7 +108,12 @@ public class OperationResource {
      */
     @GET
     @Transactional
-    public Response getAllOperations(@BeanParam PageRequestVM pageRequest, @BeanParam SortRequestVM sortRequest, @Context UriInfo uriInfo, @QueryParam(value = "eagerload") boolean eagerload) {
+    public Response getAllOperations(
+        @BeanParam PageRequestVM pageRequest,
+        @BeanParam SortRequestVM sortRequest,
+        @Context UriInfo uriInfo,
+        @QueryParam(value = "eagerload") boolean eagerload
+    ) {
         log.debug("REST request to get a page of Operations");
         var page = pageRequest.toPage();
         var sort = sortRequest.toSort();
@@ -128,7 +131,6 @@ public class OperationResource {
         return response.build();
     }
 
-
     /**
      * {@code GET  /operations/:id} : get the "id" operation.
      *
@@ -137,7 +139,6 @@ public class OperationResource {
      */
     @GET
     @Path("/{id}")
-
     public Response getOperation(@PathParam("id") Long id) {
         log.debug("REST request to get Operation : {}", id);
         Optional<Operation> operation = Operation.findOneWithEagerRelationships(id);

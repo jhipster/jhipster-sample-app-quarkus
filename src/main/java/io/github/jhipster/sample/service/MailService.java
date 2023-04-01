@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
  */
 @ApplicationScoped
 public class MailService {
+
     private final Logger log = LoggerFactory.getLogger(MailService.class);
 
     private static final String USER = "user";
@@ -50,11 +51,14 @@ public class MailService {
             .data(USER, user)
             .send()
             .subscribeAsCompletionStage()
-            .thenAccept(
-                it -> {
+            .handle((it, throwable) -> {
+                if (throwable != null) {
+                    log.warn("Email could not be sent to user '{}'", user.email, throwable);
+                } else {
                     log.debug("Sent email to User '{}'", user.email);
                 }
-            );
+                return null;
+            });
     }
 
     public CompletionStage<Void> sendActivationEmail(User user) {

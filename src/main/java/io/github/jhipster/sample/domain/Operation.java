@@ -1,20 +1,19 @@
 package io.github.jhipster.sample.domain;
+
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import javax.json.bind.annotation.JsonbTransient;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Optional;
+import java.util.Set;
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Operation.
@@ -49,9 +48,11 @@ public class Operation extends PanacheEntityBase implements Serializable {
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JoinTable(name = "operation_label",
-               joinColumns = @JoinColumn(name = "operation_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "label_id", referencedColumnName = "id"))
+    @JoinTable(
+        name = "rel_operation__label",
+        joinColumns = @JoinColumn(name = "operation_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "label_id", referencedColumnName = "id")
+    )
     @JsonbTransient
     public Set<Label> labels = new HashSet<>();
 
@@ -75,12 +76,7 @@ public class Operation extends PanacheEntityBase implements Serializable {
 
     @Override
     public String toString() {
-        return "Operation{" +
-            "id=" + id +
-            ", date='" + date + "'" +
-            ", description='" + description + "'" +
-            ", amount=" + amount +
-            "}";
+        return "Operation{" + "id=" + id + ", date='" + date + "'" + ", description='" + description + "'" + ", amount=" + amount + "}";
     }
 
     public Operation update() {
@@ -123,7 +119,7 @@ public class Operation extends PanacheEntityBase implements Serializable {
     }
 
     public static Optional<Operation> findOneWithEagerRelationships(Long id) {
-        return find("select operation from Operation operation left join fetch operation.labels where operation.id =?1", id).firstResultOptional();
+        return find("select operation from Operation operation left join fetch operation.labels where operation.id =?1", id)
+            .firstResultOptional();
     }
-
 }

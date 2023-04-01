@@ -1,7 +1,6 @@
 package io.github.jhipster.sample.web.rest.vm;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -10,6 +9,7 @@ import javax.validation.constraints.Size;
  */
 @RegisterForReflection
 public class LoginVM {
+
     @NotNull
     @Size(min = 1, max = 50)
     public String username;

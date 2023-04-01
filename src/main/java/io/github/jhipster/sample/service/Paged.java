@@ -1,7 +1,6 @@
 package io.github.jhipster.sample.service;
 
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;

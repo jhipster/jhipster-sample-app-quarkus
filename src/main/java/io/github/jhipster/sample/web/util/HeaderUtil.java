@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class HeaderUtil {
+
     private static final Logger log = LoggerFactory.getLogger(HeaderUtil.class);
 
     private HeaderUtil() {}

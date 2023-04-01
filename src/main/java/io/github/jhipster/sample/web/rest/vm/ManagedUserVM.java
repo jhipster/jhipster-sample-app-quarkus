@@ -1,8 +1,7 @@
 package io.github.jhipster.sample.web.rest.vm;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
-
 import io.github.jhipster.sample.service.dto.UserDTO;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import javax.validation.constraints.Size;
 
 /**
@@ -10,6 +9,7 @@ import javax.validation.constraints.Size;
  */
 @RegisterForReflection
 public class ManagedUserVM extends UserDTO {
+
     public static final int PASSWORD_MIN_LENGTH = 4;
 
     public static final int PASSWORD_MAX_LENGTH = 100;

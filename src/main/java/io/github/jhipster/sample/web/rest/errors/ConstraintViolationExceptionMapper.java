@@ -25,23 +25,26 @@ public final class ConstraintViolationExceptionMapper extends ExceptionMapperBas
 
     @Override
     protected HttpProblem toProblem(ConstraintViolationException exception) {
-        List<FieldErrorVM> fieldErrors = exception.getConstraintViolations()
-                .stream()
-                .map(this::toFieldErrorVM)
-                .collect(Collectors.toList());
+        List<FieldErrorVM> fieldErrors = exception
+            .getConstraintViolations()
+            .stream()
+            .map(this::toFieldErrorVM)
+            .collect(Collectors.toList());
 
-        return HttpProblem.builder()
-                .withStatus(Response.Status.BAD_REQUEST)
-                .withTitle(Response.Status.BAD_REQUEST.getReasonPhrase())
-                .with("fieldErrors", fieldErrors)
-                .build();
+        return HttpProblem
+            .builder()
+            .withStatus(Response.Status.BAD_REQUEST)
+            .withTitle(Response.Status.BAD_REQUEST.getReasonPhrase())
+            .with("fieldErrors", fieldErrors)
+            .build();
     }
 
     private FieldErrorVM toFieldErrorVM(ConstraintViolation<?> constraintViolation) {
         return new FieldErrorVM(
-                dtoName(constraintViolation.getLeafBean()),
-                constraintViolation.getMessage(),
-                dropMethodNameAndArgumentPositionFromPath(constraintViolation.getPropertyPath()));
+            dtoName(constraintViolation.getLeafBean()),
+            constraintViolation.getMessage(),
+            dropMethodNameAndArgumentPositionFromPath(constraintViolation.getPropertyPath())
+        );
     }
 
     private String dtoName(Object leafBean) {
@@ -61,5 +64,4 @@ public final class ConstraintViolationExceptionMapper extends ExceptionMapperBas
 
         return String.join(".", allNamesExceptFirstTwo);
     }
-
 }

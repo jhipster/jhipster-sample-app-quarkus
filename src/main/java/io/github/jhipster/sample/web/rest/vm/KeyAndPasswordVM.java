@@ -7,6 +7,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
  */
 @RegisterForReflection
 public class KeyAndPasswordVM {
+
     public String key;
 
     public String newPassword;

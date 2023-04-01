@@ -3,30 +3,28 @@ package io.github.jhipster.sample;
 import static io.github.jhipster.sample.config.Constants.DATE_TIME_FORMAT;
 import static io.restassured.RestAssured.given;
 import static javax.ws.rs.core.Response.Status.OK;
-import static org.hamcrest.Matchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import io.github.jhipster.sample.web.rest.vm.LoginVM;
 import io.restassured.mapper.ObjectMapper;
 import io.restassured.mapper.ObjectMapperDeserializationContext;
 import io.restassured.mapper.ObjectMapperSerializationContext;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.Temporal;
 
 /**
  * Utility class for testing REST controllers.
  */
 public final class TestUtil {
 
-    private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
-        .ofPattern(DATE_TIME_FORMAT)
-        .withZone(ZoneId.of("UTC"));
+    private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT).withZone(ZoneId.of("UTC"));
 
     public static String formatDateTime(Temporal temporal) {
         return DATE_TIME_FORMATTER.format(temporal);
@@ -80,7 +78,6 @@ public final class TestUtil {
         final var config = new JsonbConfig().withDateFormat(DATE_TIME_FORMAT, null);
         final Jsonb jsonb = JsonbBuilder.create(config);
         return new ObjectMapper() {
-
             @Override
             public Object deserialize(ObjectMapperDeserializationContext context) {
                 return jsonb.fromJson(context.getDataToDeserialize().asString(), context.getType());

@@ -6,14 +6,16 @@ import java.util.Map;
 
 @RegisterForReflection
 public class ConfigPropsVM {
-  public final Map<String, Context> contexts = new HashMap<>();
 
-  public ConfigPropsVM() {
-    this.contexts.put("JHipster", new Context());
-  }
+    public final Map<String, Context> contexts = new HashMap<>();
 
-  @RegisterForReflection
-  public class Context {
-    public final Map<String, Object> beans = new HashMap<>();
-  }
+    public ConfigPropsVM() {
+        this.contexts.put("JHipster", new Context());
+    }
+
+    @RegisterForReflection
+    public class Context {
+
+        public final Map<String, Object> beans = new HashMap<>();
+    }
 }

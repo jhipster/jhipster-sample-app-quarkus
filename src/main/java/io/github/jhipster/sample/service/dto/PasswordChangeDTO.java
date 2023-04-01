@@ -7,6 +7,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
  */
 @RegisterForReflection
 public class PasswordChangeDTO {
+
     public String currentPassword;
     public String newPassword;
 

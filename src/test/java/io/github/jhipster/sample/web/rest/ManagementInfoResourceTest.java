@@ -1,22 +1,21 @@
 package io.github.jhipster.sample.web.rest;
 
+import static io.restassured.RestAssured.given;
+import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.Response.Status.OK;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.github.jhipster.sample.TestUtil;
 import io.github.jhipster.sample.config.JHipsterProperties;
 import io.github.jhipster.sample.service.dto.ManagementInfoDTO;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
+import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import javax.inject.Inject;
-
-import static io.restassured.RestAssured.given;
-import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.OK;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
 public class ManagementInfoResourceTest {
@@ -39,13 +38,14 @@ public class ManagementInfoResourceTest {
 
         // Get Management info
         final ManagementInfoDTO info = given()
-        .contentType(APPLICATION_JSON)
-        .accept(APPLICATION_JSON)
-        .when()
-        .get("/management/info")
-        .then()
-        .statusCode(OK.getStatusCode())
-        .extract().as(MANAGEMENT_INFO_DTO);
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .when()
+            .get("/management/info")
+            .then()
+            .statusCode(OK.getStatusCode())
+            .extract()
+            .as(MANAGEMENT_INFO_DTO);
         assertThat(info.activeProfiles).contains("swagger");
     }
 
@@ -56,13 +56,14 @@ public class ManagementInfoResourceTest {
 
         // Get Management info
         final ManagementInfoDTO info = given()
-        .contentType(APPLICATION_JSON)
-        .accept(APPLICATION_JSON)
-        .when()
-        .get("/management/info")
-        .then()
-        .statusCode(OK.getStatusCode())
-        .extract().as(MANAGEMENT_INFO_DTO);
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .when()
+            .get("/management/info")
+            .then()
+            .statusCode(OK.getStatusCode())
+            .extract()
+            .as(MANAGEMENT_INFO_DTO);
         assertThat(info.activeProfiles).doesNotContain("swagger");
     }
 }

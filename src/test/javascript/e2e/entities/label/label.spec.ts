@@ -11,12 +11,14 @@ describe('Label e2e test', () => {
   let labelComponentsPage: LabelComponentsPage;
   let labelUpdatePage: LabelUpdatePage;
   let labelDeleteDialog: LabelDeleteDialog;
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
     signInPage = await navBarPage.getSignInPage();
-    await signInPage.autoSignInUsing('admin', 'admin');
+    await signInPage.autoSignInUsing(username, password);
     await browser.wait(ec.visibilityOf(navBarPage.entityMenu), 5000);
   });
 
@@ -42,8 +44,6 @@ describe('Label e2e test', () => {
 
     await promise.all([labelUpdatePage.setLabelInput('label')]);
 
-    expect(await labelUpdatePage.getLabelInput()).to.eq('label', 'Expected Label value to be equals to label');
-
     await labelUpdatePage.save();
     expect(await labelUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
@@ -57,6 +57,7 @@ describe('Label e2e test', () => {
     labelDeleteDialog = new LabelDeleteDialog();
     expect(await labelDeleteDialog.getDialogTitle()).to.eq('jhipsterSampleApplicationApp.label.delete.question');
     await labelDeleteDialog.clickOnConfirmButton();
+    await browser.wait(ec.visibilityOf(labelComponentsPage.title), 5000);
 
     expect(await labelComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
   });

@@ -1,21 +1,20 @@
 package io.github.jhipster.sample.web.rest;
 
-import io.micrometer.core.instrument.Timer;
 import io.micrometer.core.instrument.*;
+import io.micrometer.core.instrument.Timer;
 import io.micrometer.core.instrument.distribution.ValueAtPercentile;
 import io.micrometer.core.instrument.search.Search;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>JHipsterMetricsEndpoint class.</p>
@@ -52,7 +51,6 @@ public class JHipsterMetricsEndpoint {
     @GET
     @Path("/jhimetrics")
     public Map<String, Map> allMetrics() {
-
         Map<String, Map> results = new HashMap<>();
         // JVM stats
         results.put("jvm", this.jvmMemoryMetrics());
@@ -78,7 +76,10 @@ public class JHipsterMetricsEndpoint {
     private Map<String, Number> processMetrics() {
         Map<String, Number> resultsProcess = new HashMap<>();
 
-        Collection<Gauge> gauges = Search.in(this.meterRegistry).name(s -> s.contains("cpu") || s.contains("system") || s.contains("process")).gauges();
+        Collection<Gauge> gauges = Search
+            .in(this.meterRegistry)
+            .name(s -> s.contains("cpu") || s.contains("system") || s.contains("process"))
+            .gauges();
         gauges.forEach(gauge -> resultsProcess.put(gauge.getId().getName(), gauge.value()));
 
         Collection<TimeGauge> timeGauges = Search.in(this.meterRegistry).name(s -> s.contains("process")).timeGauges();
@@ -112,14 +113,20 @@ public class JHipsterMetricsEndpoint {
         Collection<Gauge> gauges = Search.in(this.meterRegistry).name(s -> s.contains("jvm.gc") && !s.contains("jvm.gc.pause")).gauges();
         gauges.forEach(gauge -> resultsGarbageCollector.put(gauge.getId().getName(), gauge.value()));
 
-        Collection<Counter> counters = Search.in(this.meterRegistry).name(s -> s.contains("jvm.gc") && !s.contains("jvm.gc.pause")).counters();
+        Collection<Counter> counters = Search
+            .in(this.meterRegistry)
+            .name(s -> s.contains("jvm.gc") && !s.contains("jvm.gc.pause"))
+            .counters();
         counters.forEach(counter -> resultsGarbageCollector.put(counter.getId().getName(), counter.count()));
 
         gauges = Search.in(this.meterRegistry).name(s -> s.contains("jvm.classes.loaded")).gauges();
         Double classesLoaded = gauges.stream().map(Gauge::value).reduce((x, y) -> (x + y)).orElse((double) 0);
         resultsGarbageCollector.put("classesLoaded", classesLoaded);
 
-        Collection<FunctionCounter> functionCounters = Search.in(this.meterRegistry).name(s -> s.contains("jvm.classes.unloaded")).functionCounters();
+        Collection<FunctionCounter> functionCounters = Search
+            .in(this.meterRegistry)
+            .name(s -> s.contains("jvm.classes.unloaded"))
+            .functionCounters();
         Double classesUnloaded = functionCounters.stream().map(FunctionCounter::count).reduce((x, y) -> (x + y)).orElse((double) 0);
         resultsGarbageCollector.put("classesUnloaded", classesUnloaded);
 
@@ -141,12 +148,21 @@ public class JHipsterMetricsEndpoint {
             crudOperation.forEach(operation -> {
                 Map<String, Number> resultsPerUriPerCrudOperation = new HashMap<>();
 
-                Collection<Timer> httpTimersStream = this.meterRegistry.find("http.server.requests").tags("uri", uri, "method", operation).timers();
+                Collection<Timer> httpTimersStream =
+                    this.meterRegistry.find("http.server.requests").tags("uri", uri, "method", operation).timers();
                 long count = httpTimersStream.stream().map(Timer::count).reduce((x, y) -> x + y).orElse(0L);
 
                 if (count != 0) {
-                    double max = httpTimersStream.stream().map(x -> x.max(TimeUnit.MILLISECONDS)).reduce((x, y) -> x > y ? x : y).orElse((double) 0);
-                    double totalTime = httpTimersStream.stream().map(x -> x.totalTime(TimeUnit.MILLISECONDS)).reduce((x, y) -> (x + y)).orElse((double) 0);
+                    double max = httpTimersStream
+                        .stream()
+                        .map(x -> x.max(TimeUnit.MILLISECONDS))
+                        .reduce((x, y) -> x > y ? x : y)
+                        .orElse((double) 0);
+                    double totalTime = httpTimersStream
+                        .stream()
+                        .map(x -> x.totalTime(TimeUnit.MILLISECONDS))
+                        .reduce((x, y) -> (x + y))
+                        .orElse((double) 0);
 
                     resultsPerUriPerCrudOperation.put("count", count);
                     resultsPerUriPerCrudOperation.put("max", max);
@@ -205,8 +221,16 @@ public class JHipsterMetricsEndpoint {
 
             Collection<Timer> httpTimersStream = this.meterRegistry.find("http.server.requests").tag("status", code).timers();
             long count = httpTimersStream.stream().map(Timer::count).reduce((x, y) -> x + y).orElse(0L);
-            double max = httpTimersStream.stream().map(x -> x.max(TimeUnit.MILLISECONDS)).reduce((x, y) -> x > y ? x : y).orElse((double) 0);
-            double totalTime = httpTimersStream.stream().map(x -> x.totalTime(TimeUnit.MILLISECONDS)).reduce((x, y) -> (x + y)).orElse((double) 0);
+            double max = httpTimersStream
+                .stream()
+                .map(x -> x.max(TimeUnit.MILLISECONDS))
+                .reduce((x, y) -> x > y ? x : y)
+                .orElse((double) 0);
+            double totalTime = httpTimersStream
+                .stream()
+                .map(x -> x.totalTime(TimeUnit.MILLISECONDS))
+                .reduce((x, y) -> (x + y))
+                .orElse((double) 0);
 
             resultsPerCode.put("count", count);
             resultsPerCode.put("max", max);
@@ -226,5 +250,4 @@ public class JHipsterMetricsEndpoint {
 
         return resultsHttp;
     }
-
 }

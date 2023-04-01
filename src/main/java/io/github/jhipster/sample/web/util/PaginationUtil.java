@@ -1,11 +1,10 @@
 package io.github.jhipster.sample.web.util;
 
 import io.github.jhipster.sample.service.Paged;
-
+import java.util.ArrayList;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.ArrayList;
 
 public final class PaginationUtil {
 
@@ -17,8 +16,7 @@ public final class PaginationUtil {
     public static final String REL_PREV = "prev";
     public static final String REL_NEXT = "next";
 
-    private PaginationUtil() {
-    }
+    private PaginationUtil() {}
 
     public static <T> Response.ResponseBuilder withPaginationInfo(Response.ResponseBuilder builder, UriInfo uriInfo, Paged<T> paged) {
         builder.header(HEADER_X_TOTAL_COUNT, paged.totalCount);
@@ -46,14 +44,19 @@ public final class PaginationUtil {
     }
 
     private static String prepareLink(UriInfo uriInfo, long pageNumber, long pageSize, String relType) {
-        return Link.fromUri(
-            uriInfo.getRequestUriBuilder()
-                .replaceQueryParam("page", pageNumber)
-                .replaceQueryParam("size", pageSize)
-                .buildFromEncoded()
-                .toString()
-                .replace(",", "%2C")
-                .replace(";", "%3B")
-        ).rel(relType).build().toString();
+        return Link
+            .fromUri(
+                uriInfo
+                    .getRequestUriBuilder()
+                    .replaceQueryParam("page", pageNumber)
+                    .replaceQueryParam("size", pageSize)
+                    .buildFromEncoded()
+                    .toString()
+                    .replace(",", "%2C")
+                    .replace(";", "%3B")
+            )
+            .rel(relType)
+            .build()
+            .toString();
     }
 }

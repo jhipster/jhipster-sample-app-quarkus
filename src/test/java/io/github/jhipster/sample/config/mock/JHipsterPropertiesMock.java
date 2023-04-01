@@ -3,12 +3,11 @@ package io.github.jhipster.sample.config.mock;
 import io.github.jhipster.sample.config.JHipsterProperties;
 import io.quarkus.test.Mock;
 import io.smallrye.config.SmallRyeConfig;
-import org.eclipse.microprofile.config.Config;
-import org.mockito.Mockito;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import org.eclipse.microprofile.config.Config;
+import org.mockito.Mockito;
 
 @ApplicationScoped
 public class JHipsterPropertiesMock {
@@ -31,7 +30,9 @@ public class JHipsterPropertiesMock {
         JHipsterProperties.Security spySecurity = Mockito.spy(jHipsterProperties.security());
         JHipsterProperties.Security.Authentication spyAuthentication = Mockito.spy(jHipsterProperties.security().authentication());
         JHipsterProperties.Security.Authentication.Jwt spyJwt = Mockito.spy(jHipsterProperties.security().authentication().jwt());
-        JHipsterProperties.Security.Authentication.Jwt.PrivateKey spyPrivateKey = Mockito.spy(jHipsterProperties.security().authentication().jwt().privateKey());
+        JHipsterProperties.Security.Authentication.Jwt.PrivateKey spyPrivateKey = Mockito.spy(
+            jHipsterProperties.security().authentication().jwt().privateKey()
+        );
         Mockito.when(spyJHipsterProperties.security()).thenReturn(spySecurity);
         Mockito.when(spyJHipsterProperties.security().authentication()).thenReturn(spyAuthentication);
         Mockito.when(spyJHipsterProperties.security().authentication().jwt()).thenReturn(spyJwt);

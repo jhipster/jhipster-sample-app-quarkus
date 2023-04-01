@@ -1,7 +1,6 @@
 package io.github.jhipster.sample.web.rest;
 
 import io.github.jhipster.sample.service.ManagementInfoService;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -25,7 +24,7 @@ public class ManagementInfoResource {
     }
 
     @GET
-    public Response info(){
+    public Response info() {
         return Response.ok(managementInfoService.getManagementInfo()).build();
     }
 }

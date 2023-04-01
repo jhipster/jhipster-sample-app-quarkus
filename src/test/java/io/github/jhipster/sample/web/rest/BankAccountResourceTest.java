@@ -9,34 +9,28 @@ import static org.hamcrest.Matchers.*;
 
 import io.github.jhipster.sample.TestUtil;
 import io.github.jhipster.sample.domain.BankAccount;
+import io.quarkus.liquibase.LiquibaseFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
+import java.math.BigDecimal;
+import java.util.List;
+import javax.inject.Inject;
 import liquibase.Liquibase;
-import io.quarkus.liquibase.LiquibaseFactory;
 import org.junit.jupiter.api.*;
 
-import javax.inject.Inject;
-
-import java.util.List;
-import java.math.BigDecimal;
-    
 @QuarkusTest
 public class BankAccountResourceTest {
 
-    private static final TypeRef<BankAccount> ENTITY_TYPE = new TypeRef<>() {
-    };
+    private static final TypeRef<BankAccount> ENTITY_TYPE = new TypeRef<>() {};
 
-    private static final TypeRef<List<BankAccount>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {
-    };
+    private static final TypeRef<List<BankAccount>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {};
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
     private static final BigDecimal DEFAULT_BALANCE = new BigDecimal(1);
     private static final BigDecimal UPDATED_BALANCE = new BigDecimal(2);
-
-
 
     String adminToken;
 
@@ -66,8 +60,6 @@ public class BankAccountResourceTest {
             e.printStackTrace();
         }
     }
-
-
 
     /**
      * Create an entity for this test.
@@ -99,22 +91,25 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Create the BankAccount
-        bankAccount = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(bankAccount)
-            .when()
-            .post("/api/bank-accounts")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        bankAccount =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(bankAccount)
+                .when()
+                .post("/api/bank-accounts")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         // Validate the BankAccount in the database
         var bankAccountList = given()
@@ -127,7 +122,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(bankAccountList).hasSize(databaseSizeBeforeCreate + 1);
         var testBankAccount = bankAccountList.stream().filter(it -> bankAccount.id.equals(it.id)).findFirst().get();
@@ -147,7 +143,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Create the BankAccount with an existing ID
@@ -177,7 +174,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(bankAccountList).hasSize(databaseSizeBeforeCreate);
     }
@@ -194,7 +192,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // set the field null
@@ -224,10 +223,12 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(bankAccountList).hasSize(databaseSizeBeforeTest);
     }
+
     @Test
     public void checkBalanceIsRequired() throws Exception {
         var databaseSizeBeforeTest = given()
@@ -240,7 +241,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // set the field null
@@ -270,7 +272,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(bankAccountList).hasSize(databaseSizeBeforeTest);
     }
@@ -278,18 +281,20 @@ public class BankAccountResourceTest {
     @Test
     public void updateBankAccount() {
         // Initialize the database
-        bankAccount = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(bankAccount)
-            .when()
-            .post("/api/bank-accounts")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        bankAccount =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(bankAccount)
+                .when()
+                .post("/api/bank-accounts")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         var databaseSizeBeforeUpdate = given()
             .auth()
@@ -301,7 +306,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Get the bankAccount
@@ -315,7 +321,9 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().body().as(ENTITY_TYPE);
+            .extract()
+            .body()
+            .as(ENTITY_TYPE);
 
         // Update the bankAccount
         updatedBankAccount.name = UPDATED_NAME;
@@ -329,7 +337,7 @@ public class BankAccountResourceTest {
             .accept(APPLICATION_JSON)
             .body(updatedBankAccount)
             .when()
-            .put("/api/bank-accounts")
+            .put("/api/bank-accounts/" + bankAccount.id)
             .then()
             .statusCode(OK.getStatusCode());
 
@@ -344,7 +352,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(bankAccountList).hasSize(databaseSizeBeforeUpdate);
         var testBankAccount = bankAccountList.stream().filter(it -> updatedBankAccount.id.equals(it.id)).findFirst().get();
@@ -364,7 +373,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
@@ -376,7 +386,7 @@ public class BankAccountResourceTest {
             .accept(APPLICATION_JSON)
             .body(bankAccount)
             .when()
-            .put("/api/bank-accounts")
+            .put("/api/bank-accounts/" + Long.MAX_VALUE)
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
@@ -391,7 +401,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(bankAccountList).hasSize(databaseSizeBeforeUpdate);
     }
@@ -399,18 +410,20 @@ public class BankAccountResourceTest {
     @Test
     public void deleteBankAccount() {
         // Initialize the database
-        bankAccount = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(bankAccount)
-            .when()
-            .post("/api/bank-accounts")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        bankAccount =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(bankAccount)
+                .when()
+                .post("/api/bank-accounts")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         var databaseSizeBeforeDelete = given()
             .auth()
@@ -422,7 +435,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Delete the bankAccount
@@ -447,7 +461,8 @@ public class BankAccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(bankAccountList).hasSize(databaseSizeBeforeDelete - 1);
     }
@@ -455,18 +470,20 @@ public class BankAccountResourceTest {
     @Test
     public void getAllBankAccounts() {
         // Initialize the database
-        bankAccount = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(bankAccount)
-            .when()
-            .post("/api/bank-accounts")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        bankAccount =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(bankAccount)
+                .when()
+                .post("/api/bank-accounts")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         // Get all the bankAccountList
         given()
@@ -480,37 +497,40 @@ public class BankAccountResourceTest {
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
             .body("id", hasItem(bankAccount.id.intValue()))
-            .body("name", hasItem(DEFAULT_NAME))            .body("balance", hasItem(DEFAULT_BALANCE.floatValue()));
+            .body("name", hasItem(DEFAULT_NAME))
+            .body("balance", hasItem(DEFAULT_BALANCE.floatValue()));
     }
 
     @Test
     public void getBankAccount() {
         // Initialize the database
-        bankAccount = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(bankAccount)
-            .when()
-            .post("/api/bank-accounts")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
-
-        var response = // Get the bankAccount
+        bankAccount =
             given()
                 .auth()
                 .preemptive()
                 .oauth2(adminToken)
-                .accept(APPLICATION_JSON)
-                .when()
-                .get("/api/bank-accounts/{id}", bankAccount.id)
-                .then()
-                .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ENTITY_TYPE);
+                .accept(APPLICATION_JSON)
+                .body(bankAccount)
+                .when()
+                .post("/api/bank-accounts")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
+
+        var response = given() // Get the bankAccount
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .accept(APPLICATION_JSON)
+            .when()
+            .get("/api/bank-accounts/{id}", bankAccount.id)
+            .then()
+            .statusCode(OK.getStatusCode())
+            .contentType(APPLICATION_JSON)
+            .extract()
+            .as(ENTITY_TYPE);
 
         // Get the bankAccount
         given()
@@ -524,9 +544,8 @@ public class BankAccountResourceTest {
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
             .body("id", is(bankAccount.id.intValue()))
-            
-                .body("name", is(DEFAULT_NAME))
-                .body("balance", comparesEqualTo(DEFAULT_BALANCE.floatValue()));
+            .body("name", is(DEFAULT_NAME))
+            .body("balance", comparesEqualTo(DEFAULT_BALANCE.floatValue()));
     }
 
     @Test

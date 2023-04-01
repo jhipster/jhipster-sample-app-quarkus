@@ -1,10 +1,9 @@
 package io.github.jhipster.sample.config.hibernate;
 
+import java.util.Locale;
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
-
-import java.util.Locale;
 
 public class JHipsterCompatiblePhysicalNamingStrategy implements PhysicalNamingStrategy {
 
@@ -53,5 +52,4 @@ public class JHipsterCompatiblePhysicalNamingStrategy implements PhysicalNamingS
         }
         return getIdentifier(builder.toString(), name.isQuoted(), jdbcEnvironment);
     }
-
 }

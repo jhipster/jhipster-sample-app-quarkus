@@ -1,15 +1,14 @@
 package io.github.jhipster.sample.service;
 
-import io.quarkus.runtime.configuration.ProfileManager;
 import io.github.jhipster.sample.config.JHipsterProperties;
 import io.github.jhipster.sample.service.dto.ManagementInfoDTO;
-
+import io.quarkus.runtime.configuration.ProfileManager;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 /**
-* Provides information for management/info resource
-*/
+ * Provides information for management/info resource
+ */
 @ApplicationScoped
 public class ManagementInfoService {
 
@@ -20,9 +19,9 @@ public class ManagementInfoService {
         this.jHipsterProperties = jHipsterProperties;
     }
 
-    public ManagementInfoDTO getManagementInfo(){
+    public ManagementInfoDTO getManagementInfo() {
         var info = new ManagementInfoDTO();
-        if(jHipsterProperties.info().swagger().enable()){
+        if (jHipsterProperties.info().swagger().enable()) {
             info.activeProfiles.add("swagger");
         }
         info.activeProfiles.add(ProfileManager.getActiveProfile());
@@ -30,4 +29,3 @@ public class ManagementInfoService {
         return info;
     }
 }
-

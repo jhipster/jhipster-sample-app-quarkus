@@ -11,6 +11,4 @@ public class JHipsterCompatibleImplicitNamingStrategy extends ImplicitNamingStra
         String joinedName = String.join("_", source.getOwningPhysicalTableName(), source.getAssociationOwningAttributePath().getProperty());
         return toIdentifier(joinedName, source.getBuildingContext());
     }
-
 }
-

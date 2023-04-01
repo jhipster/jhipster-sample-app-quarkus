@@ -16,13 +16,13 @@ import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class AuthenticationService {
+
     private final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
 
     public static final String emailValidator =
         "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
 
     final BCryptPasswordHasher passwordHasher;
-
 
     @Inject
     public AuthenticationService(BCryptPasswordHasher passwordHasher) {

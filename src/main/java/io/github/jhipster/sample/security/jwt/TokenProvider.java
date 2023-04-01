@@ -3,6 +3,7 @@ package io.github.jhipster.sample.security.jwt;
 import io.github.jhipster.sample.config.JHipsterProperties;
 import io.quarkus.security.runtime.QuarkusSecurityIdentity;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class TokenProvider {
+
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
     private static final String AUTHORITIES_KEY = "auth"; // Claim JHiptser front-end uses
@@ -37,8 +39,7 @@ public class TokenProvider {
     private final long tokenValidityInMillisecondsForRememberMe;
 
     @Inject
-    public TokenProvider(JHipsterProperties jHipsterProperties)
-        throws Exception {
+    public TokenProvider(JHipsterProperties jHipsterProperties) throws Exception {
         this.key = readPrivateKey(jHipsterProperties.security().authentication().jwt().privateKey().location());
         this.issuer = jHipsterProperties.security().authentication().jwt().issuer();
         this.tokenValidityInMilliseconds = jHipsterProperties.security().authentication().jwt().tokenValidityInSeconds() * 1000;
@@ -84,7 +85,7 @@ public class TokenProvider {
         InputStream contentIS = TokenProvider.class.getResourceAsStream(pemResName);
         byte[] tmp = new byte[4096];
         int length = contentIS.read(tmp);
-        return decodePrivateKey(new String(tmp, 0, length, "UTF-8"));
+        return decodePrivateKey(new String(tmp, 0, length, Charset.forName("UTF-8")));
     }
 
     public static PrivateKey decodePrivateKey(final String pemEncoded) throws Exception {

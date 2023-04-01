@@ -1,18 +1,17 @@
 package io.github.jhipster.sample.domain;
+
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import javax.json.bind.annotation.JsonbTransient;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A BankAccount.
@@ -66,11 +65,7 @@ public class BankAccount extends PanacheEntityBase implements Serializable {
 
     @Override
     public String toString() {
-        return "BankAccount{" +
-            "id=" + id +
-            ", name='" + name + "'" +
-            ", balance=" + balance +
-            "}";
+        return "BankAccount{" + "id=" + id + ", name='" + name + "'" + ", balance=" + balance + "}";
     }
 
     public BankAccount update() {
@@ -110,5 +105,4 @@ public class BankAccount extends PanacheEntityBase implements Serializable {
     public static PanacheQuery<BankAccount> findByUserIsCurrentUser() {
         return find("select bankAccount from BankAccount bankAccount where bankAccount.user.login = ?#{principal.username}");
     }
-
 }

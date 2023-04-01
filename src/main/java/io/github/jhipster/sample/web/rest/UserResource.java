@@ -49,11 +49,12 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Another option would be to have a specific JPA entity graph to handle this case.
  */
-@Path("/api/users")
+@Path("/api/admin/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestScoped
 public class UserResource {
+
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
     private static final String ENTITY_NAME = "users";
@@ -101,7 +102,7 @@ public class UserResource {
         } else {
             var newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
-            Response.ResponseBuilder response = Response.created(fromPath("/api/users").path(newUser.login).build()).entity(newUser);
+            Response.ResponseBuilder response = Response.created(fromPath("/api/admin/users").path(newUser.login).build()).entity(newUser);
             HeaderUtil.createAlert(applicationName, "userManagement.created", newUser.login).forEach(response::header);
             return response.build();
         }
@@ -163,18 +164,6 @@ public class UserResource {
     }
 
     /**
-     * Gets a list of all roles.
-     *
-     * @return a string list of all roles.
-     */
-    @GET
-    @Path("/authorities")
-    @RolesAllowed("ROLE_ADMIN")
-    public List<String> getAuthorities() {
-        return userService.getAuthorities();
-    }
-
-    /**
      * {@code GET /users/:login} : get the "login" user.
      *
      * @param login the login of the user to find.
@@ -187,5 +176,4 @@ public class UserResource {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(UserDTO::new));
     }
-
 }

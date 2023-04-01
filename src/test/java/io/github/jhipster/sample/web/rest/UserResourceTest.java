@@ -24,7 +24,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.HttpHeaders;
-
 import liquibase.Liquibase;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -32,6 +31,7 @@ import org.junit.jupiter.api.*;
 
 @QuarkusTest
 public class UserResourceTest {
+
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final String UPDATED_LOGIN = "jhipster";
 
@@ -110,11 +110,11 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(managedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
-        var testUser = get("/api/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
+        var testUser = get("/api/admin/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
         // Validate the User in the database
         assertThat(testUser.login).isEqualTo(DEFAULT_LOGIN);
         assertThat(testUser.firstName).isEqualTo(DEFAULT_FIRSTNAME);
@@ -138,7 +138,7 @@ public class UserResourceTest {
             .header(CONTENT_TYPE, APPLICATION_JSON)
             .header(HttpHeaders.ACCEPT, APPLICATION_JSON)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode())
             .header("X-" + applicationName + "-error", is("error.idexists"))
@@ -162,7 +162,7 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(managedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
@@ -186,7 +186,7 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(otherManagedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode())
             .header("X-" + applicationName + "-error", is("error.userexists"))
@@ -209,7 +209,7 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(managedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
@@ -233,7 +233,7 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(managedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode())
             .header("X-" + applicationName + "-error", is("error.userexists"))
@@ -256,7 +256,7 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(managedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
@@ -267,7 +267,7 @@ public class UserResourceTest {
             .oauth2(adminToken)
             .accept(APPLICATION_JSON)
             .when()
-            .get("/api/users?sort=id,desc")
+            .get("/api/admin/users?sort=id,desc")
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
@@ -290,12 +290,12 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(managedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
         // Get the user
-        get("/api/users/{login}", managedUserVM.login)
+        get("/api/admin/users/{login}", managedUserVM.login)
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
@@ -310,7 +310,7 @@ public class UserResourceTest {
 
     @Test
     public void getNonExistingUser() {
-        given().accept(APPLICATION_JSON).when().get("/api/users/unknown").then().statusCode(NOT_FOUND.getStatusCode());
+        given().accept(APPLICATION_JSON).when().get("/api/admin/users/unknown").then().statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -323,12 +323,12 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(managedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
         // Update the user
-        var updatedUser = get("/api/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
+        var updatedUser = get("/api/admin/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
 
         ManagedUserVM updatedManagedUserVM = new ManagedUserVM();
         updatedManagedUserVM.id = updatedUser.id;
@@ -355,11 +355,11 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(updatedManagedUserVM)
             .when()
-            .put("/api/users")
+            .put("/api/admin/users")
             .then()
             .statusCode(OK.getStatusCode());
 
-        User testUser = get("/api/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
+        User testUser = get("/api/admin/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
         assertThat(testUser.firstName).isEqualTo(UPDATED_FIRSTNAME);
         assertThat(testUser.lastName).isEqualTo(UPDATED_LASTNAME);
         assertThat(testUser.email).isEqualTo(UPDATED_EMAIL);
@@ -377,12 +377,12 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(managedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
         // Update the user
-        var updatedUser = get("/api/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
+        var updatedUser = get("/api/admin/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
 
         ManagedUserVM updatedManagedUserVM = new ManagedUserVM();
         updatedManagedUserVM.id = updatedUser.id;
@@ -409,12 +409,12 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(updatedManagedUserVM)
             .when()
-            .put("/api/users")
+            .put("/api/admin/users")
             .then()
             .statusCode(OK.getStatusCode());
 
         // Validate the User in the database
-        var testUser = get("/api/users/{login}", updatedManagedUserVM.login).then().extract().body().as(User.class);
+        var testUser = get("/api/admin/users/{login}", updatedManagedUserVM.login).then().extract().body().as(User.class);
         assertThat(testUser.login).isEqualTo(UPDATED_LOGIN);
         assertThat(testUser.firstName).isEqualTo(UPDATED_FIRSTNAME);
         assertThat(testUser.lastName).isEqualTo(UPDATED_LASTNAME);
@@ -434,7 +434,7 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(managedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
@@ -456,12 +456,12 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(otherManagedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
         // Update the user
-        var updatedUser = get("/api/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
+        var updatedUser = get("/api/admin/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
 
         var updatedManagedUserVM = new ManagedUserVM();
         updatedManagedUserVM.id = updatedUser.id;
@@ -487,7 +487,7 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(updatedManagedUserVM)
             .when()
-            .put("/api/users")
+            .put("/api/admin/users")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode())
             .header("X-" + applicationName + "-error", is("error.emailexists"))
@@ -510,7 +510,7 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(managedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
@@ -532,12 +532,12 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(otherManagedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
         // Update the user
-        User updatedUser = get("/api/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
+        User updatedUser = get("/api/admin/users/{login}", managedUserVM.login).then().extract().body().as(User.class);
 
         var updatedManagedUserVM = new ManagedUserVM();
         updatedManagedUserVM.id = updatedUser.id;
@@ -563,7 +563,7 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(updatedManagedUserVM)
             .when()
-            .put("/api/users")
+            .put("/api/admin/users")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode())
             .header("X-" + applicationName + "-error", is("error.userexists"))
@@ -586,7 +586,7 @@ public class UserResourceTest {
             .accept(APPLICATION_JSON)
             .body(managedUserVM)
             .when()
-            .post("/api/users")
+            .post("/api/admin/users")
             .then()
             .statusCode(CREATED.getStatusCode());
 
@@ -598,29 +598,12 @@ public class UserResourceTest {
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .when()
-            .delete("/api/users/{login}", managedUserVM.login)
+            .delete("/api/admin/users/{login}", managedUserVM.login)
             .then()
             .statusCode(NO_CONTENT.getStatusCode());
 
         // Validate the user has been removed database
-        get("/api/users/{login}", managedUserVM.login).then().statusCode(NOT_FOUND.getStatusCode());
-    }
-
-    @Test
-    public void getAllAuthorities() {
-        given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .when()
-            .get("/api/users/authorities")
-            .then()
-            .statusCode(OK.getStatusCode())
-            .contentType(APPLICATION_JSON)
-            .body("$", hasSize(greaterThan(0)))
-            .body("$", hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN));
+        get("/api/admin/users/{login}", managedUserVM.login).then().statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test

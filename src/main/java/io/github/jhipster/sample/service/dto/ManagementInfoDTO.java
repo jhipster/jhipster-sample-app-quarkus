@@ -1,14 +1,13 @@
 package io.github.jhipster.sample.service.dto;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-
-import javax.json.bind.annotation.JsonbProperty;
 import java.util.ArrayList;
 import java.util.List;
+import javax.json.bind.annotation.JsonbProperty;
 
 /**
-*  DTO to emulate /management/info response
-*/
+ *  DTO to emulate /management/info response
+ */
 @RegisterForReflection
 public class ManagementInfoDTO {
 
@@ -16,5 +15,4 @@ public class ManagementInfoDTO {
 
     @JsonbProperty("display-ribbon-on-profiles")
     public String displayRibbonOnProfiles;
-
 }

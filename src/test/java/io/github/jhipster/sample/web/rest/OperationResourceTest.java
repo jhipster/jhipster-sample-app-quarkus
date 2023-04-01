@@ -9,29 +9,25 @@ import static org.hamcrest.Matchers.*;
 
 import io.github.jhipster.sample.TestUtil;
 import io.github.jhipster.sample.domain.Operation;
+import io.quarkus.liquibase.LiquibaseFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
-import liquibase.Liquibase;
-import io.quarkus.liquibase.LiquibaseFactory;
-import org.junit.jupiter.api.*;
-
-import javax.inject.Inject;
-
-import java.util.List;
 import java.math.BigDecimal;
-    import java.time.Instant;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
+import liquibase.Liquibase;
+import org.junit.jupiter.api.*;
 
 @QuarkusTest
 public class OperationResourceTest {
 
-    private static final TypeRef<Operation> ENTITY_TYPE = new TypeRef<>() {
-    };
+    private static final TypeRef<Operation> ENTITY_TYPE = new TypeRef<>() {};
 
-    private static final TypeRef<List<Operation>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {
-    };
+    private static final TypeRef<List<Operation>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {};
 
     private static final Instant DEFAULT_DATE = Instant.ofEpochSecond(0L).truncatedTo(ChronoUnit.SECONDS);
     private static final Instant UPDATED_DATE = Instant.now().truncatedTo(ChronoUnit.SECONDS);
@@ -41,8 +37,6 @@ public class OperationResourceTest {
 
     private static final BigDecimal DEFAULT_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_AMOUNT = new BigDecimal(2);
-
-
 
     String adminToken;
 
@@ -72,8 +66,6 @@ public class OperationResourceTest {
             e.printStackTrace();
         }
     }
-
-
 
     /**
      * Create an entity for this test.
@@ -106,22 +98,25 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Create the Operation
-        operation = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(operation)
-            .when()
-            .post("/api/operations")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        operation =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(operation)
+                .when()
+                .post("/api/operations")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         // Validate the Operation in the database
         var operationList = given()
@@ -134,7 +129,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(operationList).hasSize(databaseSizeBeforeCreate + 1);
         var testOperation = operationList.stream().filter(it -> operation.id.equals(it.id)).findFirst().get();
@@ -155,7 +151,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Create the Operation with an existing ID
@@ -185,7 +182,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(operationList).hasSize(databaseSizeBeforeCreate);
     }
@@ -202,7 +200,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // set the field null
@@ -232,10 +231,12 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(operationList).hasSize(databaseSizeBeforeTest);
     }
+
     @Test
     public void checkAmountIsRequired() throws Exception {
         var databaseSizeBeforeTest = given()
@@ -248,7 +249,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // set the field null
@@ -278,7 +280,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(operationList).hasSize(databaseSizeBeforeTest);
     }
@@ -286,18 +289,20 @@ public class OperationResourceTest {
     @Test
     public void updateOperation() {
         // Initialize the database
-        operation = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(operation)
-            .when()
-            .post("/api/operations")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        operation =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(operation)
+                .when()
+                .post("/api/operations")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         var databaseSizeBeforeUpdate = given()
             .auth()
@@ -309,7 +314,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Get the operation
@@ -323,7 +329,9 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().body().as(ENTITY_TYPE);
+            .extract()
+            .body()
+            .as(ENTITY_TYPE);
 
         // Update the operation
         updatedOperation.date = UPDATED_DATE;
@@ -338,7 +346,7 @@ public class OperationResourceTest {
             .accept(APPLICATION_JSON)
             .body(updatedOperation)
             .when()
-            .put("/api/operations")
+            .put("/api/operations/" + operation.id)
             .then()
             .statusCode(OK.getStatusCode());
 
@@ -353,7 +361,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(operationList).hasSize(databaseSizeBeforeUpdate);
         var testOperation = operationList.stream().filter(it -> updatedOperation.id.equals(it.id)).findFirst().get();
@@ -374,7 +383,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
@@ -386,7 +396,7 @@ public class OperationResourceTest {
             .accept(APPLICATION_JSON)
             .body(operation)
             .when()
-            .put("/api/operations")
+            .put("/api/operations/" + Long.MAX_VALUE)
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
@@ -401,7 +411,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(operationList).hasSize(databaseSizeBeforeUpdate);
     }
@@ -409,18 +420,20 @@ public class OperationResourceTest {
     @Test
     public void deleteOperation() {
         // Initialize the database
-        operation = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(operation)
-            .when()
-            .post("/api/operations")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        operation =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(operation)
+                .when()
+                .post("/api/operations")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         var databaseSizeBeforeDelete = given()
             .auth()
@@ -432,7 +445,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE)
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE)
             .size();
 
         // Delete the operation
@@ -457,7 +471,8 @@ public class OperationResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .extract().as(LIST_OF_ENTITY_TYPE);
+            .extract()
+            .as(LIST_OF_ENTITY_TYPE);
 
         assertThat(operationList).hasSize(databaseSizeBeforeDelete - 1);
     }
@@ -465,18 +480,20 @@ public class OperationResourceTest {
     @Test
     public void getAllOperations() {
         // Initialize the database
-        operation = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(operation)
-            .when()
-            .post("/api/operations")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
+        operation =
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .body(operation)
+                .when()
+                .post("/api/operations")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
 
         // Get all the operationList
         given()
@@ -490,37 +507,41 @@ public class OperationResourceTest {
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
             .body("id", hasItem(operation.id.intValue()))
-            .body("date", hasItem(TestUtil.formatDateTime(DEFAULT_DATE)))            .body("description", hasItem(DEFAULT_DESCRIPTION))            .body("amount", hasItem(DEFAULT_AMOUNT.floatValue()));
+            .body("date", hasItem(TestUtil.formatDateTime(DEFAULT_DATE)))
+            .body("description", hasItem(DEFAULT_DESCRIPTION))
+            .body("amount", hasItem(DEFAULT_AMOUNT.floatValue()));
     }
 
     @Test
     public void getOperation() {
         // Initialize the database
-        operation = given()
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(operation)
-            .when()
-            .post("/api/operations")
-            .then()
-            .statusCode(CREATED.getStatusCode())
-            .extract().as(ENTITY_TYPE);
-
-        var response = // Get the operation
+        operation =
             given()
                 .auth()
                 .preemptive()
                 .oauth2(adminToken)
-                .accept(APPLICATION_JSON)
-                .when()
-                .get("/api/operations/{id}", operation.id)
-                .then()
-                .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
-                .extract().as(ENTITY_TYPE);
+                .accept(APPLICATION_JSON)
+                .body(operation)
+                .when()
+                .post("/api/operations")
+                .then()
+                .statusCode(CREATED.getStatusCode())
+                .extract()
+                .as(ENTITY_TYPE);
+
+        var response = given() // Get the operation
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .accept(APPLICATION_JSON)
+            .when()
+            .get("/api/operations/{id}", operation.id)
+            .then()
+            .statusCode(OK.getStatusCode())
+            .contentType(APPLICATION_JSON)
+            .extract()
+            .as(ENTITY_TYPE);
 
         // Get the operation
         given()
@@ -534,10 +555,9 @@ public class OperationResourceTest {
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
             .body("id", is(operation.id.intValue()))
-            
-                .body("date", is(TestUtil.formatDateTime(DEFAULT_DATE)))
-                .body("description", is(DEFAULT_DESCRIPTION))
-                .body("amount", comparesEqualTo(DEFAULT_AMOUNT.floatValue()));
+            .body("date", is(TestUtil.formatDateTime(DEFAULT_DATE)))
+            .body("description", is(DEFAULT_DESCRIPTION))
+            .body("amount", comparesEqualTo(DEFAULT_AMOUNT.floatValue()));
     }
 
     @Test

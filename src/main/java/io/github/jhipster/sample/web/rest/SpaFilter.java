@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebFilter(urlPatterns = "/*", asyncSupported = true)
 public class SpaFilter extends HttpFilter {
+
     private static final Pattern FILE_NAME_PATTERN = Pattern.compile(".*[.][a-zA-Z\\d]+");
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
@@ -32,6 +33,11 @@ public class SpaFilter extends HttpFilter {
             // Is it a file (eg. image, font, etc.)
             String path = request.getRequestURI().substring(request.getContextPath().length()).replaceAll("[/]+$", "");
             if (!FILE_NAME_PATTERN.matcher(path).matches()) {
+                // reset response status
+                // status is set to 404
+                response.setStatus(200);
+                // contentType is set as application/json
+                response.setContentType("text/html");
                 // pass the request resolution to the front-end routes
                 request.getRequestDispatcher("/").forward(request, response);
             }

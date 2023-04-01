@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.github.jhipster.sample.TestUtil;
 import org.junit.jupiter.api.Test;
 
-
 public class LabelTest {
 
     @Test

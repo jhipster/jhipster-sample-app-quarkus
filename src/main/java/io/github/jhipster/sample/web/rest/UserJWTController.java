@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestScoped
 public class UserJWTController {
+
     private final Logger log = LoggerFactory.getLogger(UserJWTController.class);
 
     final AuthenticationService authenticationService;
@@ -59,6 +60,7 @@ public class UserJWTController {
      */
     @RegisterForReflection
     public static class JWTToken {
+
         @JsonbProperty("id_token")
         public String idToken;
 

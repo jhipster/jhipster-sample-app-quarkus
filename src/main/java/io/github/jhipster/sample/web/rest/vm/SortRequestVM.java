@@ -1,9 +1,8 @@
 package io.github.jhipster.sample.web.rest.vm;
 
 import io.quarkus.panache.common.Sort;
-
-import javax.ws.rs.QueryParam;
 import java.util.List;
+import javax.ws.rs.QueryParam;
 
 public class SortRequestVM {
 
@@ -13,12 +12,12 @@ public class SortRequestVM {
     public Sort toSort() {
         Sort resultSort = null;
 
-        for(String currentSort : sort) {
+        for (String currentSort : sort) {
             var sortDetails = currentSort.split(",");
-            var columnName =  sortDetails[0];
-            var direction =  sortDetails.length > 1 ? sortDetails[1] : null;
+            var columnName = sortDetails[0];
+            var direction = sortDetails.length > 1 ? sortDetails[1] : null;
 
-            if(resultSort == null) {
+            if (resultSort == null) {
                 resultSort = Sort.by(columnName, toDirection(direction));
             } else {
                 resultSort.and(columnName, toDirection(direction));
@@ -34,8 +33,6 @@ public class SortRequestVM {
 
     @Override
     public String toString() {
-        return "SortRequestVM{" +
-            "sort='" + sort + '\'' +
-            '}';
+        return "SortRequestVM{" + "sort='" + sort + '\'' + '}';
     }
 }

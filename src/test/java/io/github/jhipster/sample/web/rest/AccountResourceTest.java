@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-
 import liquibase.Liquibase;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -196,11 +195,11 @@ public class AccountResourceTest {
         validUser.imageUrl = "http://placehold.it/50x50";
         validUser.langKey = Constants.DEFAULT_LANGUAGE;
         validUser.authorities = Collections.singleton(AuthoritiesConstants.USER);
-        get("/api/users/test-register-valid").then().statusCode(NOT_FOUND.getStatusCode());
+        get("/api/admin/users/test-register-valid").then().statusCode(NOT_FOUND.getStatusCode());
 
         registerUser(validUser);
 
-        get("/api/users/{login}", validUser.login).then().statusCode(OK.getStatusCode());
+        get("/api/admin/users/{login}", validUser.login).then().statusCode(OK.getStatusCode());
     }
 
     @Test
@@ -224,7 +223,7 @@ public class AccountResourceTest {
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
-        get("/api/users/{login}", invalidUser.login).then().statusCode(NOT_FOUND.getStatusCode());
+        get("/api/admin/users/{login}", invalidUser.login).then().statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -253,7 +252,7 @@ public class AccountResourceTest {
             .body("fieldErrors[0].field", is("email"))
             .body("fieldErrors[0].message", is("must be a well-formed email address"));
 
-        get("/api/users/{login}", userWihInvalidEmail.login).then().statusCode(NOT_FOUND.getStatusCode());
+        get("/api/admin/users/{login}", userWihInvalidEmail.login).then().statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -282,7 +281,7 @@ public class AccountResourceTest {
             .body("fieldErrors.field", hasItems("email", "password"))
             .body("fieldErrors.message", hasItems("must be a well-formed email address", "size must be between 4 and 100"));
 
-        get("/api/users/{login}", invalidUser.login).then().statusCode(NOT_FOUND.getStatusCode());
+        get("/api/admin/users/{login}", invalidUser.login).then().statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -306,7 +305,7 @@ public class AccountResourceTest {
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
-        get("/api/users/{login}", invalidUser.login).then().statusCode(NOT_FOUND.getStatusCode());
+        get("/api/admin/users/{login}", invalidUser.login).then().statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -389,7 +388,7 @@ public class AccountResourceTest {
             .then()
             .statusCode(CREATED.getStatusCode());
 
-        get("/api/users/{login}", firstUser.login).then().statusCode(OK.getStatusCode());
+        get("/api/admin/users/{login}", firstUser.login).then().statusCode(OK.getStatusCode());
 
         // Duplicate email, different login
         var secondUser = new ManagedUserVM();
@@ -412,9 +411,9 @@ public class AccountResourceTest {
             .then()
             .statusCode(CREATED.getStatusCode());
 
-        get("/api/users/{login}", firstUser.login).then().statusCode(NOT_FOUND.getStatusCode());
+        get("/api/admin/users/{login}", firstUser.login).then().statusCode(NOT_FOUND.getStatusCode());
 
-        get("/api/users/{login}", secondUser.login).then().statusCode(OK.getStatusCode());
+        get("/api/admin/users/{login}", secondUser.login).then().statusCode(OK.getStatusCode());
 
         var userWithUpperCaseEmail = new ManagedUserVM();
         userWithUpperCaseEmail.id = firstUser.id;
@@ -437,7 +436,7 @@ public class AccountResourceTest {
             .then()
             .statusCode(CREATED.getStatusCode());
 
-        var testUser = get("/api/users/{login}", userWithUpperCaseEmail.login)
+        var testUser = get("/api/admin/users/{login}", userWithUpperCaseEmail.login)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
@@ -493,7 +492,7 @@ public class AccountResourceTest {
         registerUser(user);
         activateUser(user.email);
 
-        var activatedUser = get("/api/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
+        var activatedUser = get("/api/admin/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
         assertThat(activatedUser.activated).isTrue();
     }
 
@@ -533,7 +532,7 @@ public class AccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode());
 
-        var updatedUser = get("/api/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
+        var updatedUser = get("/api/admin/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
 
         assertThat(updatedUser.firstName).isEqualTo(userDTO.firstName);
         assertThat(updatedUser.lastName).isEqualTo(userDTO.lastName);
@@ -574,7 +573,7 @@ public class AccountResourceTest {
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
-        var updatedUser = get("/api/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
+        var updatedUser = get("/api/admin/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
         assertThat(updatedUser.email).isEqualTo(user.email);
     }
 
@@ -616,7 +615,7 @@ public class AccountResourceTest {
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
-        var updatedUser = get("/api/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
+        var updatedUser = get("/api/admin/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
         assertThat(updatedUser.email).isEqualTo(user.email);
     }
 
@@ -650,7 +649,7 @@ public class AccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode());
 
-        var updatedUser = get("/api/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
+        var updatedUser = get("/api/admin/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
         assertThat(updatedUser.email).isEqualTo(user.email);
     }
 
@@ -836,7 +835,7 @@ public class AccountResourceTest {
             .body("password-reset-wrong-email@example.com")
             .post("/api/account/reset-password/init")
             .then()
-            .statusCode(BAD_REQUEST.getStatusCode());
+            .statusCode(OK.getStatusCode());
     }
 
     @Test

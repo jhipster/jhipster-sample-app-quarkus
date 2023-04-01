@@ -1,17 +1,16 @@
 package io.github.jhipster.sample.domain;
+
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import javax.json.bind.annotation.JsonbTransient;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Label.
@@ -58,10 +57,7 @@ public class Label extends PanacheEntityBase implements Serializable {
 
     @Override
     public String toString() {
-        return "Label{" +
-            "id=" + id +
-            ", label='" + label + "'" +
-            "}";
+        return "Label{" + "id=" + id + ", label='" + label + "'" + "}";
     }
 
     public Label update() {
@@ -95,6 +91,4 @@ public class Label extends PanacheEntityBase implements Serializable {
             return update(label);
         }
     }
-
-
 }
