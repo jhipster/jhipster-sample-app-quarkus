@@ -1,4 +1,7 @@
 {
+  "annotations": {
+    "changelogDate": "20150805124936"
+  },
   "changelogDate": "20150805124936",
   "dataAccess": "activeRecord",
   "dto": "no",
@@ -20,6 +23,7 @@
       "ownerSide": false,
       "relationshipId": 1,
       "relationshipName": "operation",
+      "relationshipSide": "right",
       "relationshipType": "many-to-many"
     }
   ]

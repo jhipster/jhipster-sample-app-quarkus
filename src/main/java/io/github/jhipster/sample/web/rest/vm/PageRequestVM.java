@@ -1,9 +1,9 @@
 package io.github.jhipster.sample.web.rest.vm;
 
 import io.quarkus.panache.common.Page;
-import javax.validation.constraints.Positive;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.QueryParam;
+import jakarta.validation.constraints.Positive;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.QueryParam;
 
 public class PageRequestVM {
 

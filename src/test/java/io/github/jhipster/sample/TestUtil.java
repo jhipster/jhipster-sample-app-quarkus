@@ -2,7 +2,7 @@ package io.github.jhipster.sample;
 
 import static io.github.jhipster.sample.config.Constants.DATE_TIME_FORMAT;
 import static io.restassured.RestAssured.given;
-import static javax.ws.rs.core.Response.Status.OK;
+import static jakarta.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -10,14 +10,14 @@ import io.github.jhipster.sample.web.rest.vm.LoginVM;
 import io.restassured.mapper.ObjectMapper;
 import io.restassured.mapper.ObjectMapperDeserializationContext;
 import io.restassured.mapper.ObjectMapperSerializationContext;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbConfig;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
-import javax.json.bind.JsonbConfig;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 
 /**
  * Utility class for testing REST controllers.

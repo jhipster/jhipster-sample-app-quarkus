@@ -16,8 +16,7 @@ describe('Label Management Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([{ path: 'label', component: LabelComponent }]), HttpClientTestingModule],
-      declarations: [LabelComponent],
+      imports: [RouterTestingModule.withRoutes([{ path: 'label', component: LabelComponent }]), HttpClientTestingModule, LabelComponent],
       providers: [
         {
           provide: ActivatedRoute,
@@ -30,7 +29,7 @@ describe('Label Management Component', () => {
                 page: '1',
                 size: '1',
                 sort: 'id,desc',
-              })
+              }),
             ),
             snapshot: { queryParams: {} },
           },
@@ -50,8 +49,8 @@ describe('Label Management Component', () => {
         new HttpResponse({
           body: [{ id: 123 }],
           headers,
-        })
-      )
+        }),
+      ),
     );
   });
 

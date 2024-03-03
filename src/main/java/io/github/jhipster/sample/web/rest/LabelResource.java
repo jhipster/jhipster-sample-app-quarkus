@@ -1,18 +1,18 @@
 package io.github.jhipster.sample.web.rest;
 
-import static javax.ws.rs.core.UriBuilder.fromPath;
+import static jakarta.ws.rs.core.UriBuilder.fromPath;
 
 import io.github.jhipster.sample.domain.Label;
 import io.github.jhipster.sample.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.sample.web.util.HeaderUtil;
 import io.github.jhipster.sample.web.util.ResponseUtil;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
 import java.util.List;
 import java.util.Optional;
-import javax.enterprise.context.ApplicationScoped;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,12 +97,14 @@ public class LabelResource {
 
     /**
      * {@code GET  /labels} : get all the labels.
-     *     * @return the {@link Response} with status {@code 200 (OK)} and the list of labels in body.
+     *     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @return the {@link Response} with status {@code 200 (OK)} and the list of labels in body.
      */
     @GET
-    public List<Label> getAllLabels() {
+    @Transactional
+    public List<Label> getAllLabels(@QueryParam(value = "eagerload") boolean eagerload) {
         log.debug("REST request to get all Labels");
-        return Label.findAll().list();
+        return Label.findAllWithEagerRelationships().list();
     }
 
     /**
@@ -115,7 +117,7 @@ public class LabelResource {
     @Path("/{id}")
     public Response getLabel(@PathParam("id") Long id) {
         log.debug("REST request to get Label : {}", id);
-        Optional<Label> label = Label.findByIdOptional(id);
+        Optional<Label> label = Label.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(label);
     }
 }

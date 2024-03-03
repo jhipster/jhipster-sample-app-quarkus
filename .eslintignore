@@ -1,9 +1,10 @@
 node_modules/
 src/main/docker/
-src/test/javascript/protractor.conf.js
 jest.conf.js
 webpack/
 target/
 build/
 node/
+coverage/
 postcss.config.js
+target/classes/META-INF/resources/

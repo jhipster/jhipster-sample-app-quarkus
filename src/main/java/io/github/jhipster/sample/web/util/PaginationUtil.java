@@ -1,10 +1,10 @@
 package io.github.jhipster.sample.web.util;
 
 import io.github.jhipster.sample.service.Paged;
+import jakarta.ws.rs.core.Link;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import java.util.ArrayList;
-import javax.ws.rs.core.Link;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 public final class PaginationUtil {
 

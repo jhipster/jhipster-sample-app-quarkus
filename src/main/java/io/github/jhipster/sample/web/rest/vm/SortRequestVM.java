@@ -1,8 +1,8 @@
 package io.github.jhipster.sample.web.rest.vm;
 
 import io.quarkus.panache.common.Sort;
+import jakarta.ws.rs.QueryParam;
 import java.util.List;
-import javax.ws.rs.QueryParam;
 
 public class SortRequestVM {
 

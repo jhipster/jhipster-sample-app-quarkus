@@ -2,8 +2,8 @@ package io.github.jhipster.sample.web.rest;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.Response.Status.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -13,8 +13,8 @@ import io.quarkus.liquibase.LiquibaseFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
+import jakarta.inject.Inject;
 import java.util.List;
-import javax.inject.Inject;
 import liquibase.Liquibase;
 import org.junit.jupiter.api.*;
 
@@ -461,18 +461,19 @@ public class LabelResourceTest {
                 .extract()
                 .as(ENTITY_TYPE);
 
-        var response = given() // Get the label
-            .auth()
-            .preemptive()
-            .oauth2(adminToken)
-            .accept(APPLICATION_JSON)
-            .when()
-            .get("/api/labels/{id}", label.id)
-            .then()
-            .statusCode(OK.getStatusCode())
-            .contentType(APPLICATION_JSON)
-            .extract()
-            .as(ENTITY_TYPE);
+        var response = // Get the label
+            given()
+                .auth()
+                .preemptive()
+                .oauth2(adminToken)
+                .accept(APPLICATION_JSON)
+                .when()
+                .get("/api/labels/{id}", label.id)
+                .then()
+                .statusCode(OK.getStatusCode())
+                .contentType(APPLICATION_JSON)
+                .extract()
+                .as(ENTITY_TYPE);
 
         // Get the label
         given()

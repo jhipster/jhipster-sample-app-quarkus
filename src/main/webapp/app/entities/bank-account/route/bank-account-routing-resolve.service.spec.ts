@@ -8,12 +8,11 @@ import { of } from 'rxjs';
 import { IBankAccount } from '../bank-account.model';
 import { BankAccountService } from '../service/bank-account.service';
 
-import { BankAccountRoutingResolveService } from './bank-account-routing-resolve.service';
+import bankAccountResolve from './bank-account-routing-resolve.service';
 
 describe('BankAccount routing resolve service', () => {
   let mockRouter: Router;
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
-  let routingResolveService: BankAccountRoutingResolveService;
   let service: BankAccountService;
   let resultBankAccount: IBankAccount | null | undefined;
 
@@ -34,7 +33,6 @@ describe('BankAccount routing resolve service', () => {
     mockRouter = TestBed.inject(Router);
     jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
     mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
-    routingResolveService = TestBed.inject(BankAccountRoutingResolveService);
     service = TestBed.inject(BankAccountService);
     resultBankAccount = undefined;
   });
@@ -46,8 +44,12 @@ describe('BankAccount routing resolve service', () => {
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN
-      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultBankAccount = result;
+      TestBed.runInInjectionContext(() => {
+        bankAccountResolve(mockActivatedRouteSnapshot).subscribe({
+          next(result) {
+            resultBankAccount = result;
+          },
+        });
       });
 
       // THEN
@@ -61,8 +63,12 @@ describe('BankAccount routing resolve service', () => {
       mockActivatedRouteSnapshot.params = {};
 
       // WHEN
-      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultBankAccount = result;
+      TestBed.runInInjectionContext(() => {
+        bankAccountResolve(mockActivatedRouteSnapshot).subscribe({
+          next(result) {
+            resultBankAccount = result;
+          },
+        });
       });
 
       // THEN
@@ -76,8 +82,12 @@ describe('BankAccount routing resolve service', () => {
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN
-      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultBankAccount = result;
+      TestBed.runInInjectionContext(() => {
+        bankAccountResolve(mockActivatedRouteSnapshot).subscribe({
+          next(result) {
+            resultBankAccount = result;
+          },
+        });
       });
 
       // THEN

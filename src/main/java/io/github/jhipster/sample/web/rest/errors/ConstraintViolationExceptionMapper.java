@@ -2,18 +2,18 @@ package io.github.jhipster.sample.web.rest.errors;
 
 import com.tietoevry.quarkus.resteasy.problem.ExceptionMapperBase;
 import com.tietoevry.quarkus.resteasy.problem.HttpProblem;
+import jakarta.annotation.Priority;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
+import jakarta.ws.rs.Priorities;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.Provider;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-import javax.annotation.Priority;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Path;
-import javax.ws.rs.Priorities;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
 
 /**
  * Exception Mapper for ConstraintViolationException from Bean Validation AP (Hibernate Validator).

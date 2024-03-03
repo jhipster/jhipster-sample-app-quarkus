@@ -1,8 +1,8 @@
 package io.github.jhipster.sample.web.rest;
 
 import static io.restassured.RestAssured.given;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.Response.Status.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -10,13 +10,13 @@ import io.github.jhipster.sample.TestUtil;
 import io.github.jhipster.sample.web.rest.vm.LoginVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import io.quarkus.liquibase.LiquibaseFactory;
-import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
+import io.vertx.ext.mail.MailMessage;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.HttpHeaders;
 import java.util.List;
 import java.util.regex.Pattern;
-import javax.inject.Inject;
-import javax.ws.rs.core.HttpHeaders;
 import liquibase.Liquibase;
 import org.junit.jupiter.api.*;
 
@@ -53,8 +53,8 @@ public class UserJWTControllerTest {
     }
 
     private void activateUser(String email) {
-        List<Mail> sent = mailbox.getMessagesSentTo(email.toLowerCase());
-        Mail creationEmail = sent.get(sent.size() - 1); // get the last mail
+        List<MailMessage> sent = mailbox.getMailMessagesSentTo(email.toLowerCase());
+        MailMessage creationEmail = sent.get(sent.size() - 1); // get the last mail
         var matcher = Pattern.compile(".*key=(\\w+).*", Pattern.MULTILINE).matcher(creationEmail.getHtml());
 
         if (!matcher.find()) {

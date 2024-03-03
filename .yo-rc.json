@@ -6,12 +6,12 @@
     "blueprints": [
       {
         "name": "generator-jhipster-quarkus",
-        "version": "2.0.0"
+        "version": "3.0.0"
       }
     ],
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
-    "clientFramework": "angularX",
+    "cacheProvider": "caffeine",
+    "clientFramework": "angular",
     "clientPackageManager": "npm",
     "clientTheme": "none",
     "clientThemeVariant": "",
@@ -30,7 +30,7 @@
     "entitySuffix": "",
     "hibernateCache": "ehcache",
     "jhiPrefix": "jhi",
-    "jhipsterVersion": "7.9.3",
+    "jhipsterVersion": "8.1.0",
     "jwtSecretKey": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
     "languages": ["en"],
     "messageBroker": false,

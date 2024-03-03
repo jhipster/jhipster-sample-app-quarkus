@@ -1,21 +1,22 @@
 package io.github.jhipster.sample.domain;
 
 import io.github.jhipster.sample.config.Constants;
+import io.github.jhipster.sample.config.Constants;
+import io.quarkus.cache.CacheResult;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.panache.common.Page;
-import io.quarkus.runtime.annotations.RegisterForReflection;
+import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -188,10 +189,12 @@ public class User extends PanacheEntityBase implements Serializable {
         return find("FROM User u LEFT JOIN FETCH u.authorities WHERE u.id = ?1", id).firstResultOptional();
     }
 
+    @CacheResult(cacheName = Constants.USERS_BY_LOGIN_CACHE)
     public static Optional<User> findOneWithAuthoritiesByLogin(String login) {
         return find("FROM User u LEFT JOIN FETCH u.authorities WHERE u.login = ?1", login).firstResultOptional();
     }
 
+    @CacheResult(cacheName = Constants.USERS_BY_EMAIL_CACHE)
     public static Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email) {
         return find("FROM User u LEFT JOIN FETCH u.authorities WHERE LOWER(u.login) = LOWER(?1)", email).firstResultOptional();
     }

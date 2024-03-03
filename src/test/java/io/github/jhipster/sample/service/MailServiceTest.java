@@ -3,11 +3,11 @@ package io.github.jhipster.sample.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.jhipster.sample.domain.User;
-import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
+import io.vertx.ext.mail.MailMessage;
+import jakarta.inject.Inject;
 import java.util.List;
-import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +25,7 @@ public class MailServiceTest {
 
     private static final String[] languages = {
         // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array
-        //  TODO this array should be used along side Localized templates to ensure languages are correctly handle
+        // TODO: this array should be used alongside localized templates to ensure languages are correctly handle
         // see https://github.com/quarkusio/quarkus/issues/7665
         // https://quarkus.io/guides/qute-reference#localization
     };
@@ -50,9 +50,9 @@ public class MailServiceTest {
 
         mailService.sendActivationEmail(user);
 
-        List<Mail> sent = mailbox.getMessagesSentTo(user.email);
+        List<MailMessage> sent = mailbox.getMailMessagesSentTo(user.email);
         assertThat(sent).hasSize(1);
-        Mail actual = sent.get(0);
+        MailMessage actual = sent.get(0);
         assertThat(actual.getHtml()).contains("Your JHipster account has been created, please click on the URL below to activate it:");
         assertThat(actual.getSubject()).isEqualTo("jhipsterSampleApplication account activation is required");
     }
@@ -63,9 +63,9 @@ public class MailServiceTest {
 
         mailService.sendCreationEmail(user);
 
-        List<Mail> sent = mailbox.getMessagesSentTo(user.email);
+        List<MailMessage> sent = mailbox.getMailMessagesSentTo(user.email);
         assertThat(sent).hasSize(1);
-        Mail actual = sent.get(0);
+        MailMessage actual = sent.get(0);
         assertThat(actual.getHtml()).contains("Your JHipster account has been created, please click on the URL below to access it:");
         assertThat(actual.getSubject()).isEqualTo("jhipsterSampleApplication account activation is required");
     }
@@ -76,9 +76,9 @@ public class MailServiceTest {
 
         mailService.sendPasswordResetMail(user);
 
-        List<Mail> sent = mailbox.getMessagesSentTo(user.email);
+        List<MailMessage> sent = mailbox.getMailMessagesSentTo(user.email);
         assertThat(sent).hasSize(1);
-        Mail actual = sent.get(0);
+        MailMessage actual = sent.get(0);
         assertThat(actual.getHtml())
             .contains("For your JHipster account a password reset was requested, please click on the URL below to reset it:");
         assertThat(actual.getSubject()).isEqualTo("jhipsterSampleApplication password reset");

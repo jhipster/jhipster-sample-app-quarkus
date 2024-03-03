@@ -1,6 +1,6 @@
 package io.github.jhipster.sample.web.rest;
 
-import static javax.ws.rs.core.UriBuilder.fromPath;
+import static jakarta.ws.rs.core.UriBuilder.fromPath;
 
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
@@ -12,15 +12,15 @@ import io.github.jhipster.sample.web.rest.errors.EmailAlreadyUsedException;
 import io.github.jhipster.sample.web.rest.errors.LoginAlreadyUsedException;
 import io.github.jhipster.sample.web.util.HeaderUtil;
 import io.github.jhipster.sample.web.util.ResponseUtil;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.security.RolesAllowed;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

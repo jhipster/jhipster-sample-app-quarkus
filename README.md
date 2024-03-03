@@ -1,6 +1,8 @@
 # jhipsterSampleApplication
 
-This application was generated using JHipster 7.9.3 and JHipster Quarkus 2.0.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.9.3](https://www.jhipster.tech/documentation-archive/v7.9.3).
+This application was generated using JHipster 8.1.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.1.0](https://www.jhipster.tech/documentation-archive/v8.1.0).
+
+This application was generated using JHipster 8.1.0 and JHipster Quarkus , you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.1.0](https://www.jhipster.tech/documentation-archive/v8.1.0).
 
 ## Project Structure
 
@@ -8,7 +10,7 @@ Node is required for generation and recommended for development. `package.json` 
 
 In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
 
-`/src/*` structure follows default Java structure.
+`/src/*` structure follows default Quarkus structure.
 
 - `.yo-rc.json` - Yeoman configuration file
   JHipster configuration is stored in this file at `generator-jhipster` key. You may find `generator-jhipster-*` for specific blueprints configuration.
@@ -54,7 +56,7 @@ The `npm run` command will list all of the scripts available to run for this pro
 
 JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
 
-The service worker initialization code is disabled by default. To enable it, uncomment the following code in `src/main/webapp/app/app.module.ts`:
+The service worker initialization code is disabled by default. To enable it, uncomment the following code in `src/main/webapp/app/app.config.ts`:
 
 ```typescript
 ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
@@ -75,7 +77,7 @@ npm install --save-dev --save-exact @types/leaflet
 ```
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
-Edit [src/main/webapp/app/app.module.ts](src/main/webapp/app/app.module.ts) file:
+Edit [src/main/webapp/app/app.config.ts](src/main/webapp/app/app.config.ts) file:
 
 ```
 import 'leaflet/dist/leaflet.js';
@@ -84,7 +86,7 @@ import 'leaflet/dist/leaflet.js';
 Edit [src/main/webapp/content/scss/vendor.scss](src/main/webapp/content/scss/vendor.scss) file:
 
 ```
-@import '~leaflet/dist/leaflet.css';
+@import 'leaflet/dist/leaflet.css';
 ```
 
 Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
@@ -106,15 +108,7 @@ will generate few files:
 ```
 create src/main/webapp/app/my-component/my-component.component.html
 create src/main/webapp/app/my-component/my-component.component.ts
-update src/main/webapp/app/app.module.ts
-```
-
-### JHipster Control Center
-
-JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
-
-```
-docker-compose -f src/main/docker/jhipster-control-center.yml up
+update src/main/webapp/app/app.config.ts
 ```
 
 ## Building for production
@@ -159,13 +153,15 @@ If you plan to run your application in a container, run:
 
 It will use a Docker container with GraalVM installed and produce an 64 bit Linux executable.
 
+### JHipster Control Center
+
+JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
+
+```
+docker compose -f src/main/docker/jhipster-control-center.yml up
+```
+
 ## Testing
-
-To launch your application's tests, run:
-
-```
-./mvnw verify
-```
 
 ### Client tests
 
@@ -175,57 +171,63 @@ Unit tests are run by [Jest][]. They're located in [src/test/javascript/](src/te
 npm test
 ```
 
-UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [src/test/javascript/e2e](src/test/javascript/e2e)
-and can be run by starting Spring Boot in one terminal (`./mvnw spring-boot:run`) and running the tests (`npm run e2e`) in a second one.
+### Quarkus tests
 
-### Other tests
+To launch your application's tests, run:
 
-Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/gatling](src/test/gatling).
+```
+./mvnw verify
+```
 
-To use those tests, you must install Gatling from [https://gatling.io/](https://gatling.io/).
+## Others
 
-For more information, refer to the [Running tests page][].
-
-### Code quality
+### Code quality using Sonar
 
 Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
 
 ```
-docker-compose -f src/main/docker/sonar.yml up -d
+docker compose -f src/main/docker/sonar.yml up -d
 ```
 
-Note: we have turned off authentication in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
+Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
 
 You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
 
 Then, run a Sonar analysis:
 
 ```
-./mvnw -Pprod clean verify sonar:sonar
+./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
 ```
 
 If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
 
 ```
-./mvnw initialize sonar:sonar
+./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
+```
+
+Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
+
+```
+sonar.login=admin
+sonar.password=admin
 ```
 
 For more information, refer to the [Code quality page][].
 
-## Using Docker to simplify development (optional)
+### Using Docker to simplify development (optional)
 
 You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 
 For example, to start a mysql database in a docker container, run:
 
 ```
-docker-compose -f src/main/docker/mysql.yml up -d
+docker compose -f src/main/docker/mysql.yml up -d
 ```
 
 To stop it and remove the container, run:
 
 ```
-docker-compose -f src/main/docker/mysql.yml down
+docker compose -f src/main/docker/mysql.yml down
 ```
 
 You can also fully dockerize your application and all the services that it depends on.
@@ -244,7 +246,7 @@ npm run java:docker:arm64
 Then run:
 
 ```
-docker-compose -f src/main/docker/app.yml up -d
+docker compose -f src/main/docker/app.yml up -d
 ```
 
 When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental `Use the new Virtualization framework` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).
@@ -255,21 +257,20 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
-[jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 7.9.3 archive]: https://www.jhipster.tech/documentation-archive/v7.9.3
-[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v7.9.3/development/
-[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v7.9.3/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v7.9.3/production/
-[running tests page]: https://www.jhipster.tech/documentation-archive/v7.9.3/running-tests/
-[code quality page]: https://www.jhipster.tech/documentation-archive/v7.9.3/code-quality/
-[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v7.9.3/setting-up-ci/
-[node.js]: https://nodejs.org/
-[npm]: https://www.npmjs.com/
-[webpack]: https://webpack.github.io/
-[browsersync]: https://www.browsersync.io/
-[jest]: https://facebook.github.io/jest/
-[protractor]: https://angular.github.io/protractor/
-[leaflet]: https://leafletjs.com/
-[definitelytyped]: https://definitelytyped.org/
-[angular cli]: https://cli.angular.io/
-[gatling]: https://gatling.io/
+[JHipster Homepage and latest documentation]: https://www.jhipster.tech
+[JHipster 8.1.0 archive]: https://www.jhipster.tech/documentation-archive/v8.1.0
+[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v8.1.0/development/
+[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v8.1.0/docker-compose
+[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v8.1.0/production/
+[Running tests page]: https://www.jhipster.tech/documentation-archive/v8.1.0/running-tests/
+[Code quality page]: https://www.jhipster.tech/documentation-archive/v8.1.0/code-quality/
+[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v8.1.0/setting-up-ci/
+[Node.js]: https://nodejs.org/
+[NPM]: https://www.npmjs.com/
+[Webpack]: https://webpack.github.io/
+[BrowserSync]: https://www.browsersync.io/
+[Jest]: https://facebook.github.io/jest/
+[Leaflet]: https://leafletjs.com/
+[DefinitelyTyped]: https://definitelytyped.org/
+[Angular CLI]: https://cli.angular.io/
+[Quarkus Blueprint for JHipster]: https://github.com/jhipster/generator-jhipster-quarkus

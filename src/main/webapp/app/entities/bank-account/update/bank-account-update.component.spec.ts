@@ -6,12 +6,12 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
-import { BankAccountFormService } from './bank-account-form.service';
+import { IUser } from 'app/entities/user/user.model';
+import { UserService } from 'app/entities/user/user.service';
 import { BankAccountService } from '../service/bank-account.service';
 import { IBankAccount } from '../bank-account.model';
 
-import { IUser } from 'app/entities/user/user.model';
-import { UserService } from 'app/entities/user/user.service';
+import { BankAccountFormService } from './bank-account-form.service';
 
 import { BankAccountUpdateComponent } from './bank-account-update.component';
 
@@ -25,8 +25,7 @@ describe('BankAccount Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-      declarations: [BankAccountUpdateComponent],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]), BankAccountUpdateComponent],
       providers: [
         FormBuilder,
         {
@@ -52,10 +51,10 @@ describe('BankAccount Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call User query and add missing value', () => {
       const bankAccount: IBankAccount = { id: 456 };
-      const user: IUser = { id: 39533 };
+      const user: IUser = { id: 3995 };
       bankAccount.user = user;
 
-      const userCollection: IUser[] = [{ id: 39416 }];
+      const userCollection: IUser[] = [{ id: 28177 }];
       jest.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
       const additionalUsers = [user];
       const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
@@ -67,14 +66,14 @@ describe('BankAccount Management Update Component', () => {
       expect(userService.query).toHaveBeenCalled();
       expect(userService.addUserToCollectionIfMissing).toHaveBeenCalledWith(
         userCollection,
-        ...additionalUsers.map(expect.objectContaining)
+        ...additionalUsers.map(expect.objectContaining),
       );
       expect(comp.usersSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const bankAccount: IBankAccount = { id: 456 };
-      const user: IUser = { id: 90365 };
+      const user: IUser = { id: 7253 };
       bankAccount.user = user;
 
       activatedRoute.data = of({ bankAccount });

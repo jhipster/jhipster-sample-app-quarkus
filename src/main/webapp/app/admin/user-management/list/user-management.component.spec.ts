@@ -7,11 +7,11 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
+import { AccountService } from 'app/core/auth/account.service';
 import { UserManagementService } from '../service/user-management.service';
 import { User } from '../user-management.model';
-import { AccountService } from 'app/core/auth/account.service';
 
-import { UserManagementComponent } from './user-management.component';
+import UserManagementComponent from './user-management.component';
 
 describe('User Management Component', () => {
   let comp: UserManagementComponent;
@@ -26,13 +26,12 @@ describe('User Management Component', () => {
       page: '1',
       size: '1',
       sort: 'id,desc',
-    })
+    }),
   );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-      declarations: [UserManagementComponent],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]), UserManagementComponent],
       providers: [{ provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
     })
       .overrideTemplate(UserManagementComponent, '')
@@ -58,8 +57,8 @@ describe('User Management Component', () => {
             new HttpResponse({
               body: [new User(123)],
               headers,
-            })
-          )
+            }),
+          ),
         );
 
         // WHEN
@@ -69,7 +68,7 @@ describe('User Management Component', () => {
         // THEN
         expect(service.query).toHaveBeenCalled();
         expect(comp.users?.[0]).toEqual(expect.objectContaining({ id: 123 }));
-      })
+      }),
     ));
   });
 
@@ -85,8 +84,8 @@ describe('User Management Component', () => {
             new HttpResponse({
               body: [user],
               headers,
-            })
-          )
+            }),
+          ),
         );
         jest.spyOn(service, 'update').mockReturnValue(of(user));
 
@@ -98,7 +97,7 @@ describe('User Management Component', () => {
         expect(service.update).toHaveBeenCalledWith({ ...user, activated: true });
         expect(service.query).toHaveBeenCalled();
         expect(comp.users?.[0]).toEqual(expect.objectContaining({ id: 123 }));
-      })
+      }),
     ));
   });
 });

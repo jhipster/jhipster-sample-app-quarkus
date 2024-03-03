@@ -3,8 +3,8 @@ package io.github.jhipster.sample.service;
 import io.github.jhipster.sample.config.JHipsterProperties;
 import io.github.jhipster.sample.service.dto.ManagementInfoDTO;
 import io.quarkus.runtime.configuration.ProfileManager;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * Provides information for management/info resource

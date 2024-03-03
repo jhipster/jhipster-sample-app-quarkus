@@ -7,10 +7,10 @@ import io.github.jhipster.sample.security.UsernameNotFoundException;
 import io.quarkus.security.AuthenticationFailedException;
 import io.quarkus.security.runtime.QuarkusPrincipal;
 import io.quarkus.security.runtime.QuarkusSecurityIdentity;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import java.util.Locale;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

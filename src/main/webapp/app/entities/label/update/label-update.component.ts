@@ -4,13 +4,18 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { LabelFormService, LabelFormGroup } from './label-form.service';
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { ILabel } from '../label.model';
 import { LabelService } from '../service/label.service';
+import { LabelFormService, LabelFormGroup } from './label-form.service';
 
 @Component({
+  standalone: true,
   selector: 'jhi-label-update',
   templateUrl: './label-update.component.html',
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class LabelUpdateComponent implements OnInit {
   isSaving = false;
@@ -21,7 +26,7 @@ export class LabelUpdateComponent implements OnInit {
   constructor(
     protected labelService: LabelService,
     protected labelFormService: LabelFormService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {

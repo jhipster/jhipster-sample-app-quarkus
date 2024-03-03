@@ -3,17 +3,17 @@ package io.github.jhipster.sample.web.rest;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.web.rest.vm.LoggerVM;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javax.annotation.security.RolesAllowed;
-import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 @Path("/management/loggers")
 @Produces(MediaType.APPLICATION_JSON)

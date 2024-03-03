@@ -16,8 +16,11 @@ describe('BankAccount Management Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([{ path: 'bank-account', component: BankAccountComponent }]), HttpClientTestingModule],
-      declarations: [BankAccountComponent],
+      imports: [
+        RouterTestingModule.withRoutes([{ path: 'bank-account', component: BankAccountComponent }]),
+        HttpClientTestingModule,
+        BankAccountComponent,
+      ],
       providers: [
         {
           provide: ActivatedRoute,
@@ -30,7 +33,7 @@ describe('BankAccount Management Component', () => {
                 page: '1',
                 size: '1',
                 sort: 'id,desc',
-              })
+              }),
             ),
             snapshot: { queryParams: {} },
           },
@@ -50,8 +53,8 @@ describe('BankAccount Management Component', () => {
         new HttpResponse({
           body: [{ id: 123 }],
           headers,
-        })
-      )
+        }),
+      ),
     );
   });
 

@@ -3,12 +3,13 @@ package io.github.jhipster.sample.domain;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
-import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -90,5 +91,13 @@ public class Label extends PanacheEntityBase implements Serializable {
         } else {
             return update(label);
         }
+    }
+
+    public static PanacheQuery<Label> findAllWithEagerRelationships() {
+        return find("select distinct label from Label label");
+    }
+
+    public static Optional<Label> findOneWithEagerRelationships(Long id) {
+        return find("select label from Label label where label.id =?1", id).firstResultOptional();
     }
 }

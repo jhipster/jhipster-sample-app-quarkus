@@ -1,9 +1,9 @@
 package io.github.jhipster.sample.utility;
 
 import static io.restassured.RestAssured.given;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.*;
-import static javax.ws.rs.core.Response.Status.OK;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.blankOrNullString;
@@ -13,9 +13,9 @@ import io.github.jhipster.sample.web.rest.vm.LoginVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import io.restassured.response.Response;
 import io.vertx.core.json.JsonObject;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
 import java.util.regex.Pattern;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 
 /**
  * Base class encapsulating login/logout functions required by all Integration

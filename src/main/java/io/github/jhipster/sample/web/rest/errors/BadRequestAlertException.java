@@ -1,8 +1,8 @@
 package io.github.jhipster.sample.web.rest.errors;
 
 import com.tietoevry.quarkus.resteasy.problem.HttpProblem;
+import jakarta.ws.rs.core.Response;
 import java.net.URI;
-import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.config.ConfigProvider;
 
 public class BadRequestAlertException extends HttpProblem {

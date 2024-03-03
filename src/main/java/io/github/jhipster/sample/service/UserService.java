@@ -7,16 +7,17 @@ import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.security.BCryptPasswordHasher;
 import io.github.jhipster.sample.security.RandomUtil;
 import io.github.jhipster.sample.service.dto.UserDTO;
+import io.quarkus.cache.CacheInvalidate;
 import io.quarkus.panache.common.Page;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,7 @@ public class UserService {
                 // activate given user for the registration key.
                 user.activated = true;
                 user.activationKey = null;
+                this.clearUserCaches(user);
                 log.debug("Activated user: {}", user);
                 return user;
             });
@@ -55,6 +57,7 @@ public class UserService {
                     throw new InvalidPasswordException();
                 }
                 user.password = passwordHasher.hash(newPassword);
+                this.clearUserCaches(user);
                 log.debug("Changed password for User: {}", user);
             });
     }
@@ -68,6 +71,7 @@ public class UserService {
                 user.password = passwordHasher.hash(newPassword);
                 user.resetKey = null;
                 user.resetDate = null;
+                this.clearUserCaches(user);
                 return user;
             });
     }
@@ -79,6 +83,7 @@ public class UserService {
             .map(user -> {
                 user.resetKey = RandomUtil.generateResetKey();
                 user.resetDate = Instant.now();
+                this.clearUserCaches(user);
                 return user;
             });
     }
@@ -119,6 +124,7 @@ public class UserService {
         Authority.<Authority>findByIdOptional(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.authorities = authorities;
         User.persist(newUser);
+        this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
@@ -128,6 +134,7 @@ public class UserService {
             return false;
         }
         User.delete("id", existingUser.id);
+        this.clearUserCaches(existingUser);
         return true;
     }
 
@@ -159,6 +166,7 @@ public class UserService {
                     .collect(Collectors.toSet());
         }
         User.persist(user);
+        this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -168,6 +176,7 @@ public class UserService {
             .findOneByLogin(login)
             .ifPresent(user -> {
                 User.delete("id", user.id);
+                this.clearUserCaches(user);
                 log.debug("Deleted User: {}", user);
             });
     }
@@ -199,6 +208,7 @@ public class UserService {
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .forEach(managedAuthorities::add);
+                this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })
@@ -226,6 +236,7 @@ public class UserService {
                 }
                 user.langKey = langKey;
                 user.imageUrl = imageUrl;
+                this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -241,4 +252,17 @@ public class UserService {
     public List<String> getAuthorities() {
         return Authority.<Authority>streamAll().map(authority -> authority.name).collect(Collectors.toList());
     }
+
+    public void clearUserCaches(User user) {
+        this.clearUserCachesByLogin(user.login);
+        if (user.email != null) {
+            this.clearUserCachesByEmail(user.email);
+        }
+    }
+
+    @CacheInvalidate(cacheName = Constants.USERS_BY_EMAIL_CACHE)
+    public void clearUserCachesByEmail(String email) {}
+
+    @CacheInvalidate(cacheName = Constants.USERS_BY_LOGIN_CACHE)
+    public void clearUserCachesByLogin(String login) {}
 }

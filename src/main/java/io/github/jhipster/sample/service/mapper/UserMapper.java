@@ -3,12 +3,12 @@ package io.github.jhipster.sample.service.mapper;
 import io.github.jhipster.sample.domain.Authority;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.service.dto.UserDTO;
+import jakarta.inject.Singleton;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.inject.Singleton;
 
 /**
  * Mapper for the entity {@link User} and its DTO called {@link UserDTO}.

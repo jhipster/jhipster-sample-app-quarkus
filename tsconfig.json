@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
     "baseUrl": "src/main/webapp/",
-    "outDir": "./target/classes/static/",
+    "outDir": "./target/out-tsc/root",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "strictNullChecks": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
-    "skipLibCheck": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
@@ -16,10 +15,17 @@
     "importHelpers": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2020",
+    "useDefineForClassFields": false,
+    "target": "es2022",
     "module": "es2020",
-    "lib": ["es2018", "dom"]
+    "types": [],
+    "lib": ["es2018", "es2020", "dom"]
   },
+  "references": [
+    {
+      "path": "tsconfig.spec.json"
+    }
+  ],
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,

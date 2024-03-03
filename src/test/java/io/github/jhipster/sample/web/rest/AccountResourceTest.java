@@ -1,11 +1,10 @@
 package io.github.jhipster.sample.web.rest;
 
-import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
-import static javax.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
+import static jakarta.ws.rs.core.Response.Status.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -21,18 +20,19 @@ import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.sample.web.rest.vm.LoginVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import io.quarkus.liquibase.LiquibaseFactory;
-import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
+import io.restassured.specification.RequestSpecification;
+import io.vertx.ext.mail.MailMessage;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
-import javax.inject.Inject;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 import liquibase.Liquibase;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -85,8 +85,8 @@ public class AccountResourceTest {
     }
 
     private void activateUser(String email) {
-        List<Mail> sent = mailbox.getMessagesSentTo(email.toLowerCase());
-        Mail creationEmail = sent.get(sent.size() - 1); // get the last mail
+        List<MailMessage> sent = mailbox.getMailMessagesSentTo(email.toLowerCase());
+        MailMessage creationEmail = sent.get(sent.size() - 1); // get the last mail
         var matcher = Pattern.compile(".*key=(\\w+).*", Pattern.MULTILINE).matcher(creationEmail.getHtml());
 
         if (!matcher.find()) {
@@ -162,10 +162,7 @@ public class AccountResourceTest {
         activateUser(user.email);
         var token = authenticateUser(user.login, user.password);
 
-        given()
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
+        authenticateRequest(token)
             .get("/api/account")
             .then()
             .statusCode(OK.getStatusCode())
@@ -195,11 +192,18 @@ public class AccountResourceTest {
         validUser.imageUrl = "http://placehold.it/50x50";
         validUser.langKey = Constants.DEFAULT_LANGUAGE;
         validUser.authorities = Collections.singleton(AuthoritiesConstants.USER);
-        get("/api/admin/users/test-register-valid").then().statusCode(NOT_FOUND.getStatusCode());
+
+        authenticateRequest(TestUtil.getAdminToken())
+            .get("/api/admin/users/test-register-valid")
+            .then()
+            .statusCode(NOT_FOUND.getStatusCode());
 
         registerUser(validUser);
 
-        get("/api/admin/users/{login}", validUser.login).then().statusCode(OK.getStatusCode());
+        authenticateRequest(TestUtil.getAdminToken())
+            .get("/api/admin/users/{login}", validUser.login)
+            .then()
+            .statusCode(OK.getStatusCode());
     }
 
     @Test
@@ -223,7 +227,10 @@ public class AccountResourceTest {
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
-        get("/api/admin/users/{login}", invalidUser.login).then().statusCode(NOT_FOUND.getStatusCode());
+        authenticateRequest(TestUtil.getAdminToken())
+            .get("/api/admin/users/{login}", invalidUser.login)
+            .then()
+            .statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -252,7 +259,10 @@ public class AccountResourceTest {
             .body("fieldErrors[0].field", is("email"))
             .body("fieldErrors[0].message", is("must be a well-formed email address"));
 
-        get("/api/admin/users/{login}", userWihInvalidEmail.login).then().statusCode(NOT_FOUND.getStatusCode());
+        authenticateRequest(TestUtil.getAdminToken())
+            .get("/api/admin/users/{login}", userWihInvalidEmail.login)
+            .then()
+            .statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -281,7 +291,10 @@ public class AccountResourceTest {
             .body("fieldErrors.field", hasItems("email", "password"))
             .body("fieldErrors.message", hasItems("must be a well-formed email address", "size must be between 4 and 100"));
 
-        get("/api/admin/users/{login}", invalidUser.login).then().statusCode(NOT_FOUND.getStatusCode());
+        authenticateRequest(TestUtil.getAdminToken())
+            .get("/api/admin/users/{login}", invalidUser.login)
+            .then()
+            .statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -305,7 +318,10 @@ public class AccountResourceTest {
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
-        get("/api/admin/users/{login}", invalidUser.login).then().statusCode(NOT_FOUND.getStatusCode());
+        authenticateRequest(TestUtil.getAdminToken())
+            .get("/api/admin/users/{login}", invalidUser.login)
+            .then()
+            .statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -388,7 +404,10 @@ public class AccountResourceTest {
             .then()
             .statusCode(CREATED.getStatusCode());
 
-        get("/api/admin/users/{login}", firstUser.login).then().statusCode(OK.getStatusCode());
+        authenticateRequest(TestUtil.getAdminToken())
+            .get("/api/admin/users/{login}", firstUser.login)
+            .then()
+            .statusCode(OK.getStatusCode());
 
         // Duplicate email, different login
         var secondUser = new ManagedUserVM();
@@ -411,9 +430,15 @@ public class AccountResourceTest {
             .then()
             .statusCode(CREATED.getStatusCode());
 
-        get("/api/admin/users/{login}", firstUser.login).then().statusCode(NOT_FOUND.getStatusCode());
+        authenticateRequest(TestUtil.getAdminToken())
+            .get("/api/admin/users/{login}", firstUser.login)
+            .then()
+            .statusCode(NOT_FOUND.getStatusCode());
 
-        get("/api/admin/users/{login}", secondUser.login).then().statusCode(OK.getStatusCode());
+        authenticateRequest(TestUtil.getAdminToken())
+            .get("/api/admin/users/{login}", secondUser.login)
+            .then()
+            .statusCode(OK.getStatusCode());
 
         var userWithUpperCaseEmail = new ManagedUserVM();
         userWithUpperCaseEmail.id = firstUser.id;
@@ -436,7 +461,8 @@ public class AccountResourceTest {
             .then()
             .statusCode(CREATED.getStatusCode());
 
-        var testUser = get("/api/admin/users/{login}", userWithUpperCaseEmail.login)
+        var testUser = authenticateRequest(TestUtil.getAdminToken())
+            .get("/api/admin/users/{login}", userWithUpperCaseEmail.login)
             .then()
             .statusCode(OK.getStatusCode())
             .extract()
@@ -492,7 +518,12 @@ public class AccountResourceTest {
         registerUser(user);
         activateUser(user.email);
 
-        var activatedUser = get("/api/admin/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
+        var activatedUser = authenticateRequest(TestUtil.getAdminToken())
+            .get("/api/admin/users/{login}", user.login)
+            .then()
+            .statusCode(OK.getStatusCode())
+            .extract()
+            .as(User.class);
         assertThat(activatedUser.activated).isTrue();
     }
 
@@ -523,16 +554,14 @@ public class AccountResourceTest {
         userDTO.langKey = Constants.DEFAULT_LANGUAGE;
         userDTO.authorities = Set.of(AuthoritiesConstants.ADMIN);
 
-        given()
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(userDTO)
-            .post("/api/account")
-            .then()
-            .statusCode(OK.getStatusCode());
+        authenticateRequest(token).body(userDTO).post("/api/account").then().statusCode(OK.getStatusCode());
 
-        var updatedUser = get("/api/admin/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
+        var updatedUser = authenticateRequest(token)
+            .get("/api/admin/users/{login}", user.login)
+            .then()
+            .statusCode(OK.getStatusCode())
+            .extract()
+            .as(User.class);
 
         assertThat(updatedUser.firstName).isEqualTo(userDTO.firstName);
         assertThat(updatedUser.lastName).isEqualTo(userDTO.lastName);
@@ -564,16 +593,14 @@ public class AccountResourceTest {
         userDTO.langKey = Constants.DEFAULT_LANGUAGE;
         userDTO.authorities = Set.of(AuthoritiesConstants.ADMIN);
 
-        given()
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(userDTO)
-            .post("/api/account")
-            .then()
-            .statusCode(BAD_REQUEST.getStatusCode());
+        authenticateRequest(token).body(userDTO).post("/api/account").then().statusCode(BAD_REQUEST.getStatusCode());
 
-        var updatedUser = get("/api/admin/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
+        var updatedUser = authenticateRequest(token)
+            .get("/api/admin/users/{login}", user.login)
+            .then()
+            .statusCode(OK.getStatusCode())
+            .extract()
+            .as(User.class);
         assertThat(updatedUser.email).isEqualTo(user.email);
     }
 
@@ -606,16 +633,14 @@ public class AccountResourceTest {
         userDTO.langKey = Constants.DEFAULT_LANGUAGE;
         userDTO.authorities = Set.of(AuthoritiesConstants.ADMIN);
 
-        given()
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(userDTO)
-            .post("/api/account")
-            .then()
-            .statusCode(BAD_REQUEST.getStatusCode());
+        authenticateRequest(token).body(userDTO).post("/api/account").then().statusCode(BAD_REQUEST.getStatusCode());
 
-        var updatedUser = get("/api/admin/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
+        var updatedUser = authenticateRequest(token)
+            .get("/api/admin/users/{login}", user.login)
+            .then()
+            .statusCode(OK.getStatusCode())
+            .extract()
+            .as(User.class);
         assertThat(updatedUser.email).isEqualTo(user.email);
     }
 
@@ -640,16 +665,14 @@ public class AccountResourceTest {
         userDTO.langKey = Constants.DEFAULT_LANGUAGE;
         userDTO.authorities = Set.of(AuthoritiesConstants.ADMIN);
 
-        given()
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(userDTO)
-            .post("/api/account")
-            .then()
-            .statusCode(OK.getStatusCode());
+        authenticateRequest(token).body(userDTO).post("/api/account").then().statusCode(OK.getStatusCode());
 
-        var updatedUser = get("/api/admin/users/{login}", user.login).then().statusCode(OK.getStatusCode()).extract().as(User.class);
+        var updatedUser = authenticateRequest(token)
+            .get("/api/admin/users/{login}", user.login)
+            .then()
+            .statusCode(OK.getStatusCode())
+            .extract()
+            .as(User.class);
         assertThat(updatedUser.email).isEqualTo(user.email);
     }
 
@@ -668,10 +691,7 @@ public class AccountResourceTest {
         passwordChangeDTO.currentPassword = "1" + user.password;
         passwordChangeDTO.newPassword = "new password";
 
-        given()
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
+        authenticateRequest(token)
             .body(passwordChangeDTO)
             .post("/api/account/change-password")
             .then()
@@ -693,14 +713,7 @@ public class AccountResourceTest {
         passwordChangeDTO.currentPassword = user.password;
         passwordChangeDTO.newPassword = "new password";
 
-        given()
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .body(passwordChangeDTO)
-            .post("/api/account/change-password")
-            .then()
-            .statusCode(OK.getStatusCode());
+        authenticateRequest(token).body(passwordChangeDTO).post("/api/account/change-password").then().statusCode(OK.getStatusCode());
     }
 
     @Test
@@ -718,10 +731,7 @@ public class AccountResourceTest {
         passwordChangeDTO.currentPassword = user.password;
         passwordChangeDTO.newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MIN_LENGTH - 1);
 
-        given()
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
+        authenticateRequest(token)
             .body(passwordChangeDTO)
             .post("/api/account/change-password")
             .then()
@@ -743,10 +753,7 @@ public class AccountResourceTest {
         passwordChangeDTO.currentPassword = user.password;
         passwordChangeDTO.newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MAX_LENGTH + 1);
 
-        given()
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
+        authenticateRequest(token)
             .body(passwordChangeDTO)
             .post("/api/account/change-password")
             .then()
@@ -768,10 +775,7 @@ public class AccountResourceTest {
         passwordChangeDTO.currentPassword = user.password;
         passwordChangeDTO.newPassword = "";
 
-        given()
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .contentType(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
+        authenticateRequest(token)
             .body(passwordChangeDTO)
             .post("/api/account/change-password")
             .then()
@@ -857,8 +861,8 @@ public class AccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode());
 
-        List<Mail> sent = mailbox.getMessagesSentTo(user.email);
-        Mail resetMail = sent.get(sent.size() - 1); // get the last mail
+        List<MailMessage> sent = mailbox.getMailMessagesSentTo(user.email);
+        MailMessage resetMail = sent.get(sent.size() - 1); // get the last mail
         var matcher = Pattern.compile(".*key=(\\w+).*", Pattern.MULTILINE).matcher(resetMail.getHtml());
 
         if (!matcher.find()) {
@@ -899,8 +903,8 @@ public class AccountResourceTest {
             .then()
             .statusCode(OK.getStatusCode());
 
-        List<Mail> sent = mailbox.getMessagesSentTo(user.email);
-        Mail resetMail = sent.get(sent.size() - 1); // get the last mail
+        List<MailMessage> sent = mailbox.getMailMessagesSentTo(user.email);
+        MailMessage resetMail = sent.get(sent.size() - 1); // get the last mail
         var matcher = Pattern.compile(".*key=(\\w+).*", Pattern.MULTILINE).matcher(resetMail.getHtml());
 
         if (!matcher.find()) {
@@ -936,5 +940,9 @@ public class AccountResourceTest {
             .post("/api/account/reset-password/finish")
             .then()
             .statusCode(INTERNAL_SERVER_ERROR.getStatusCode());
+    }
+
+    private RequestSpecification authenticateRequest(String token) {
+        return given().header(HttpHeaders.AUTHORIZATION, "Bearer " + token).contentType(APPLICATION_JSON).accept(APPLICATION_JSON);
     }
 }

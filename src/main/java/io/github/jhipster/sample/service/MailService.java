@@ -4,9 +4,9 @@ import io.github.jhipster.sample.config.JHipsterProperties;
 import io.github.jhipster.sample.domain.User;
 import io.quarkus.mailer.MailTemplate;
 import io.quarkus.qute.Location;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import java.util.concurrent.CompletionStage;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

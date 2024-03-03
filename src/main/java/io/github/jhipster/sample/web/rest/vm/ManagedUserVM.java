@@ -2,7 +2,7 @@ package io.github.jhipster.sample.web.rest.vm;
 
 import io.github.jhipster.sample.service.dto.UserDTO;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 /**
  * View Model extending the UserDTO, which is meant to be used in the user management UI.

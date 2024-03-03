@@ -2,8 +2,8 @@ package io.github.jhipster.sample.config;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import jakarta.ws.rs.ext.ParamConverter;
 import java.time.LocalDate;
-import javax.ws.rs.ext.ParamConverter;
 import org.junit.jupiter.api.Test;
 
 class LocalDateProviderTest {

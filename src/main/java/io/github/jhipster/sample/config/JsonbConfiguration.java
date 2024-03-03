@@ -1,9 +1,9 @@
 package io.github.jhipster.sample.config;
 
 import io.quarkus.jsonb.JsonbConfigCustomizer;
+import jakarta.inject.Singleton;
+import jakarta.json.bind.JsonbConfig;
 import java.util.Locale;
-import javax.inject.Singleton;
-import javax.json.bind.JsonbConfig;
 
 /**
  * Jsonb Configuration

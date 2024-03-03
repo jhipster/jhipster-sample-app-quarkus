@@ -2,8 +2,8 @@ package io.github.jhipster.sample.web.rest;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.OK;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.jhipster.sample.TestUtil;
@@ -12,7 +12,7 @@ import io.github.jhipster.sample.service.dto.ManagementInfoDTO;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

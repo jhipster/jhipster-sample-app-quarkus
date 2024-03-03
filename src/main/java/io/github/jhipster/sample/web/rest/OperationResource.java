@@ -1,6 +1,6 @@
 package io.github.jhipster.sample.web.rest;
 
-import static javax.ws.rs.core.UriBuilder.fromPath;
+import static jakarta.ws.rs.core.UriBuilder.fromPath;
 
 import io.github.jhipster.sample.domain.Operation;
 import io.github.jhipster.sample.service.Paged;
@@ -10,13 +10,12 @@ import io.github.jhipster.sample.web.rest.vm.SortRequestVM;
 import io.github.jhipster.sample.web.util.HeaderUtil;
 import io.github.jhipster.sample.web.util.PaginationUtil;
 import io.github.jhipster.sample.web.util.ResponseUtil;
-import java.util.List;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
 import java.util.Optional;
-import javax.enterprise.context.ApplicationScoped;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

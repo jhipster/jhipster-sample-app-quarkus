@@ -1,10 +1,10 @@
 package io.github.jhipster.sample.security;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Objects;
-import javax.enterprise.context.ApplicationScoped;
 import org.wildfly.security.credential.PasswordCredential;
 import org.wildfly.security.evidence.PasswordGuessEvidence;
 import org.wildfly.security.password.Password;

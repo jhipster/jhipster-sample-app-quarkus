@@ -14,12 +14,11 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type LabelFormGroupInput = ILabel | PartialWithRequiredKeyOf<NewLabel>;
 
-type LabelFormDefaults = Pick<NewLabel, 'id' | 'operations'>;
+type LabelFormDefaults = Pick<NewLabel, 'id'>;
 
 type LabelFormGroupContent = {
   id: FormControl<ILabel['id'] | NewLabel['id']>;
   label: FormControl<ILabel['label']>;
-  operations: FormControl<ILabel['operations']>;
 };
 
 export type LabelFormGroup = FormGroup<LabelFormGroupContent>;
@@ -37,12 +36,11 @@ export class LabelFormService {
         {
           nonNullable: true,
           validators: [Validators.required],
-        }
+        },
       ),
       label: new FormControl(labelRawValue.label, {
         validators: [Validators.required, Validators.minLength(3)],
       }),
-      operations: new FormControl(labelRawValue.operations ?? []),
     });
   }
 
@@ -56,14 +54,13 @@ export class LabelFormService {
       {
         ...labelRawValue,
         id: { value: labelRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */
+      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
     );
   }
 
   private getFormDefaults(): LabelFormDefaults {
     return {
       id: null,
-      operations: [],
     };
   }
 }

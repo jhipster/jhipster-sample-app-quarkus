@@ -1,9 +1,9 @@
 package io.github.jhipster.sample.service.dto;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import jakarta.json.bind.annotation.JsonbProperty;
 import java.util.ArrayList;
 import java.util.List;
-import javax.json.bind.annotation.JsonbProperty;
 
 /**
  *  DTO to emulate /management/info response

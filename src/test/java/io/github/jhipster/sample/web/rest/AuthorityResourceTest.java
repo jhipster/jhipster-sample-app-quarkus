@@ -1,15 +1,15 @@
 package io.github.jhipster.sample.web.rest;
 
 import static io.restassured.RestAssured.given;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.OK;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.Matchers.*;
 
 import io.github.jhipster.sample.TestUtil;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.quarkus.liquibase.LiquibaseFactory;
 import io.quarkus.test.junit.QuarkusTest;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import liquibase.Liquibase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

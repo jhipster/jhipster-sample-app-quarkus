@@ -1,4 +1,7 @@
 {
+  "annotations": {
+    "changelogDate": "20150805124838"
+  },
   "changelogDate": "20150805124838",
   "dataAccess": "activeRecord",
   "dto": "no",
@@ -24,6 +27,7 @@
       "otherEntityName": "user",
       "relationshipId": 1,
       "relationshipName": "user",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
@@ -31,6 +35,7 @@
       "otherEntityRelationshipName": "bankAccount",
       "relationshipId": 2,
       "relationshipName": "operation",
+      "relationshipSide": "left",
       "relationshipType": "one-to-many"
     }
   ]
