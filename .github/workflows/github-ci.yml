@@ -40,7 +40,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           if [[ -n "$SONAR_TOKEN" && "$GITHUB_REPOSITORY" = "jhipster/jhipster-sample-app-quarkus" && "$GITHUB_REF" = "refs/heads/main" ]]; then
-            ./mvnw -ntp initialize sonar:sonar -Dsonar.organization=jhipster -Dsonar.projectKey=jhipster:jhipster-sample-app-quarkus -Dsonar.host.url=https://sonarcloud.io
+            ./mvnw -ntp initialize sonar:sonar -Dsonar.organization=jhipster -Dsonar.projectKey=jhipster_jhipster-sample-app-quarkus -Dsonar.host.url=https://sonarcloud.io
           fi
       - name: Package application
         run: ./mvnw -ntp package -Pprod -DskipTests
