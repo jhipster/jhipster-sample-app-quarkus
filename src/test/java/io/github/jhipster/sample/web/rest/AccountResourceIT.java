@@ -30,16 +30,14 @@ class AccountResourceIT extends IntegrationTestBase {
 
     @BeforeEach
     void init() {
-        userBuilder =
-            UserBuilder
-                .aUser()
-                .withLogin("johndoe")
-                .withPassword("Passw0rd")
-                .withFirstName("John")
-                .withLastName("Doe")
-                .withEmail("john.doe@jhipster.tech")
-                .withImageUrl("http://placehold.it/50x50")
-                .withLangKey("en");
+        userBuilder = UserBuilder.aUser()
+            .withLogin("johndoe")
+            .withPassword("Passw0rd")
+            .withFirstName("John")
+            .withLastName("Doe")
+            .withEmail("john.doe@jhipster.tech")
+            .withImageUrl("http://placehold.it/50x50")
+            .withLangKey("en");
     }
 
     @Test

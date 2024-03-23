@@ -17,8 +17,8 @@
 
         <maven.version>3.9.4</maven.version>
         <java.version>17</java.version>
-        <node.version>v18.18.2</node.version>
-        <npm.version>10.2.4</npm.version>
+        <node.version>v20.11.1</node.version>
+        <npm.version>10.5.0</npm.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -29,7 +29,7 @@
         <maven.compiler.release>${java.version}</maven.compiler.release>
 
         <!-- Dependency properties -->
-        <quarkus.platform.version>3.8.1</quarkus.platform.version>
+        <quarkus.platform.version>3.8.3</quarkus.platform.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <resteasy-problem.version>3.1.0</resteasy-problem.version>
         <archunit-junit5.version>1.2.1</archunit-junit5.version>

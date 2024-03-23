@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -21,13 +21,12 @@ export class LabelUpdateComponent implements OnInit {
   isSaving = false;
   label: ILabel | null = null;
 
-  editForm: LabelFormGroup = this.labelFormService.createLabelFormGroup();
+  protected labelService = inject(LabelService);
+  protected labelFormService = inject(LabelFormService);
+  protected activatedRoute = inject(ActivatedRoute);
 
-  constructor(
-    protected labelService: LabelService,
-    protected labelFormService: LabelFormService,
-    protected activatedRoute: ActivatedRoute,
-  ) {}
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  editForm: LabelFormGroup = this.labelFormService.createLabelFormGroup();
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ label }) => {

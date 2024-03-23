@@ -45,14 +45,14 @@ public class AuthenticationService {
         log.debug("Authenticating {}", login);
 
         if (login.matches(emailValidator)) {
-            return User
-                .findOneWithAuthoritiesByEmailIgnoreCase(login)
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+            return User.findOneWithAuthoritiesByEmailIgnoreCase(login).orElseThrow(
+                () -> new UsernameNotFoundException("User with email " + login + " was not found in the database")
+            );
         }
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-        return User
-            .findOneWithAuthoritiesByLogin(lowercaseLogin)
-            .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
+        return User.findOneWithAuthoritiesByLogin(lowercaseLogin).orElseThrow(
+            () -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database")
+        );
     }
 
     private QuarkusSecurityIdentity createQuarkusSecurityIdentity(User user) {

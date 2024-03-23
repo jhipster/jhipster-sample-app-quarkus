@@ -79,8 +79,9 @@ public class MailServiceTest {
         List<MailMessage> sent = mailbox.getMailMessagesSentTo(user.email);
         assertThat(sent).hasSize(1);
         MailMessage actual = sent.get(0);
-        assertThat(actual.getHtml())
-            .contains("For your JHipster account a password reset was requested, please click on the URL below to reset it:");
+        assertThat(actual.getHtml()).contains(
+            "For your JHipster account a password reset was requested, please click on the URL below to reset it:"
+        );
         assertThat(actual.getSubject()).isEqualTo("jhipsterSampleApplication password reset");
     }
 }

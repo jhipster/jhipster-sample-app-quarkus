@@ -7,8 +7,7 @@ import org.eclipse.microprofile.config.ConfigProvider;
 
 public class BadRequestAlertException extends HttpProblem {
 
-    private static final String APPLICATION_NAME = ConfigProvider
-        .getConfig()
+    private static final String APPLICATION_NAME = ConfigProvider.getConfig()
         .getOptionalValue("application.name", String.class)
         .orElse("jhipster");
 

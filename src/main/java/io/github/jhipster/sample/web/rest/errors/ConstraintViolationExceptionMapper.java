@@ -31,8 +31,7 @@ public final class ConstraintViolationExceptionMapper extends ExceptionMapperBas
             .map(this::toFieldErrorVM)
             .collect(Collectors.toList());
 
-        return HttpProblem
-            .builder()
+        return HttpProblem.builder()
             .withStatus(Response.Status.BAD_REQUEST)
             .withTitle(Response.Status.BAD_REQUEST.getReasonPhrase())
             .with("fieldErrors", fieldErrors)

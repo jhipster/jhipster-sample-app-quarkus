@@ -88,11 +88,9 @@ public class OperationResource {
     @Transactional
     public Response deleteOperation(@PathParam("id") Long id) {
         log.debug("REST request to delete Operation : {}", id);
-        Operation
-            .findByIdOptional(id)
-            .ifPresent(operation -> {
-                operation.delete();
-            });
+        Operation.findByIdOptional(id).ifPresent(operation -> {
+            operation.delete();
+        });
         var response = Response.noContent();
         HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()).forEach(response::header);
         return response.build();

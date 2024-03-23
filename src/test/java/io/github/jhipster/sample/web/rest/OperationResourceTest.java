@@ -46,8 +46,8 @@ public class OperationResourceTest {
 
     @BeforeAll
     static void jsonMapper() {
-        RestAssured.config =
-            RestAssured.config().objectMapperConfig(objectMapperConfig().defaultObjectMapper(TestUtil.jsonbObjectMapper()));
+        RestAssured.config = RestAssured.config()
+            .objectMapperConfig(objectMapperConfig().defaultObjectMapper(TestUtil.jsonbObjectMapper()));
     }
 
     @BeforeEach
@@ -102,20 +102,19 @@ public class OperationResourceTest {
             .size();
 
         // Create the Operation
-        operation =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(operation)
-                .when()
-                .post("/api/operations")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        operation = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(operation)
+            .when()
+            .post("/api/operations")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         // Validate the Operation in the database
         var operationList = given()
@@ -288,20 +287,19 @@ public class OperationResourceTest {
     @Test
     public void updateOperation() {
         // Initialize the database
-        operation =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(operation)
-                .when()
-                .post("/api/operations")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        operation = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(operation)
+            .when()
+            .post("/api/operations")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         var databaseSizeBeforeUpdate = given()
             .auth()
@@ -419,20 +417,19 @@ public class OperationResourceTest {
     @Test
     public void deleteOperation() {
         // Initialize the database
-        operation =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(operation)
-                .when()
-                .post("/api/operations")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        operation = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(operation)
+            .when()
+            .post("/api/operations")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         var databaseSizeBeforeDelete = given()
             .auth()
@@ -479,20 +476,19 @@ public class OperationResourceTest {
     @Test
     public void getAllOperations() {
         // Initialize the database
-        operation =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(operation)
-                .when()
-                .post("/api/operations")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        operation = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(operation)
+            .when()
+            .post("/api/operations")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         // Get all the operationList
         given()
@@ -514,20 +510,19 @@ public class OperationResourceTest {
     @Test
     public void getOperation() {
         // Initialize the database
-        operation =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(operation)
-                .when()
-                .post("/api/operations")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        operation = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(operation)
+            .when()
+            .post("/api/operations")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         var response = // Get the operation
             given()

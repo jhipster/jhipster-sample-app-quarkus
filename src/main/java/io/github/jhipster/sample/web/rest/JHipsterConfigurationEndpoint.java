@@ -33,8 +33,7 @@ public class JHipsterConfigurationEndpoint {
     @RolesAllowed(AuthoritiesConstants.ADMIN)
     public EnvVM getEnvs() {
         Iterable<ConfigSource> configSources = ConfigProvider.getConfig().getConfigSources();
-        List<EnvVM.PropertySource> propertySources = StreamSupport
-            .stream(configSources.spliterator(), false)
+        List<EnvVM.PropertySource> propertySources = StreamSupport.stream(configSources.spliterator(), false)
             .map(configSource -> new EnvVM.PropertySource(configSource.getName(), configSource.getProperties()))
             .collect(Collectors.toList());
 

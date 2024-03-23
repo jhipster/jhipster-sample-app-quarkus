@@ -85,11 +85,9 @@ public class LabelResource {
     @Transactional
     public Response deleteLabel(@PathParam("id") Long id) {
         log.debug("REST request to delete Label : {}", id);
-        Label
-            .findByIdOptional(id)
-            .ifPresent(label -> {
-                label.delete();
-            });
+        Label.findByIdOptional(id).ifPresent(label -> {
+            label.delete();
+        });
         var response = Response.noContent();
         HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()).forEach(response::header);
         return response.build();

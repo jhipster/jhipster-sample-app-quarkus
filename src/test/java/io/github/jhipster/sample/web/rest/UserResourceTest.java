@@ -63,8 +63,8 @@ public class UserResourceTest {
 
     @BeforeAll
     static void jsonMapper() {
-        RestAssured.config =
-            RestAssured.config().objectMapperConfig(objectMapperConfig().defaultObjectMapper(TestUtil.jsonbObjectMapper()));
+        RestAssured.config = RestAssured.config()
+            .objectMapperConfig(objectMapperConfig().defaultObjectMapper(TestUtil.jsonbObjectMapper()));
     }
 
     @BeforeEach

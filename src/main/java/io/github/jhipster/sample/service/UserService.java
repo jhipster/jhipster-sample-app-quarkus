@@ -36,36 +36,31 @@ public class UserService {
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
-        return User
-            .findOneByActivationKey(key)
-            .map(user -> {
-                // activate given user for the registration key.
-                user.activated = true;
-                user.activationKey = null;
-                this.clearUserCaches(user);
-                log.debug("Activated user: {}", user);
-                return user;
-            });
+        return User.findOneByActivationKey(key).map(user -> {
+            // activate given user for the registration key.
+            user.activated = true;
+            user.activationKey = null;
+            this.clearUserCaches(user);
+            log.debug("Activated user: {}", user);
+            return user;
+        });
     }
 
     public void changePassword(String login, String currentClearTextPassword, String newPassword) {
-        User
-            .findOneByLogin(login)
-            .ifPresent(user -> {
-                String currentEncryptedPassword = user.password;
-                if (!passwordHasher.checkPassword(currentClearTextPassword, currentEncryptedPassword)) {
-                    throw new InvalidPasswordException();
-                }
-                user.password = passwordHasher.hash(newPassword);
-                this.clearUserCaches(user);
-                log.debug("Changed password for User: {}", user);
-            });
+        User.findOneByLogin(login).ifPresent(user -> {
+            String currentEncryptedPassword = user.password;
+            if (!passwordHasher.checkPassword(currentClearTextPassword, currentEncryptedPassword)) {
+                throw new InvalidPasswordException();
+            }
+            user.password = passwordHasher.hash(newPassword);
+            this.clearUserCaches(user);
+            log.debug("Changed password for User: {}", user);
+        });
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
-        return User
-            .findOneByResetKey(key)
+        return User.findOneByResetKey(key)
             .filter(user -> user.resetDate.isAfter(Instant.now().minusSeconds(86400)))
             .map(user -> {
                 user.password = passwordHasher.hash(newPassword);
@@ -77,8 +72,7 @@ public class UserService {
     }
 
     public Optional<User> requestPasswordReset(String mail) {
-        return User
-            .findOneByEmailIgnoreCase(mail)
+        return User.findOneByEmailIgnoreCase(mail)
             .filter(user -> user.activated)
             .map(user -> {
                 user.resetKey = RandomUtil.generateResetKey();
@@ -89,22 +83,18 @@ public class UserService {
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-        User
-            .findOneByLogin(userDTO.login.toLowerCase())
-            .ifPresent(existingUser -> {
-                var removed = removeNonActivatedUser(existingUser);
-                if (!removed) {
-                    throw new UsernameAlreadyUsedException();
-                }
-            });
-        User
-            .findOneByEmailIgnoreCase(userDTO.email)
-            .ifPresent(existingUser -> {
-                var removed = removeNonActivatedUser(existingUser);
-                if (!removed) {
-                    throw new EmailAlreadyUsedException();
-                }
-            });
+        User.findOneByLogin(userDTO.login.toLowerCase()).ifPresent(existingUser -> {
+            var removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new UsernameAlreadyUsedException();
+            }
+        });
+        User.findOneByEmailIgnoreCase(userDTO.email).ifPresent(existingUser -> {
+            var removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new EmailAlreadyUsedException();
+            }
+        });
         var newUser = new User();
         newUser.login = userDTO.login.toLowerCase();
         // new user gets initially a generated password
@@ -157,13 +147,12 @@ public class UserService {
         user.resetDate = Instant.now();
         user.activated = true;
         if (userDTO.authorities != null) {
-            user.authorities =
-                userDTO.authorities
-                    .stream()
-                    .map(authority -> Authority.<Authority>findByIdOptional(authority))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toSet());
+            user.authorities = userDTO.authorities
+                .stream()
+                .map(authority -> Authority.<Authority>findByIdOptional(authority))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
         }
         User.persist(user);
         this.clearUserCaches(user);
@@ -172,13 +161,11 @@ public class UserService {
     }
 
     public void deleteUser(String login) {
-        User
-            .findOneByLogin(login)
-            .ifPresent(user -> {
-                User.delete("id", user.id);
-                this.clearUserCaches(user);
-                log.debug("Deleted User: {}", user);
-            });
+        User.findOneByLogin(login).ifPresent(user -> {
+            User.delete("id", user.id);
+            this.clearUserCaches(user);
+            log.debug("Deleted User: {}", user);
+        });
     }
 
     /**
@@ -188,8 +175,7 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        return User
-            .<User>findByIdOptional(userDTO.id)
+        return User.<User>findByIdOptional(userDTO.id)
             .map(user -> {
                 user.login = userDTO.login.toLowerCase();
                 user.firstName = userDTO.firstName;
@@ -226,19 +212,17 @@ public class UserService {
      * @param imageUrl  image URL of user.
      */
     public void updateUser(String login, String firstName, String lastName, String email, String langKey, String imageUrl) {
-        User
-            .findOneByLogin(login)
-            .ifPresent(user -> {
-                user.firstName = firstName;
-                user.lastName = lastName;
-                if (email != null) {
-                    user.email = email.toLowerCase();
-                }
-                user.langKey = langKey;
-                user.imageUrl = imageUrl;
-                this.clearUserCaches(user);
-                log.debug("Changed Information for User: {}", user);
-            });
+        User.findOneByLogin(login).ifPresent(user -> {
+            user.firstName = firstName;
+            user.lastName = lastName;
+            if (email != null) {
+                user.email = email.toLowerCase();
+            }
+            user.langKey = langKey;
+            user.imageUrl = imageUrl;
+            this.clearUserCaches(user);
+            log.debug("Changed Information for User: {}", user);
+        });
     }
 
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {

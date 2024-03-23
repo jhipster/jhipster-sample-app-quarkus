@@ -41,8 +41,8 @@ public class BankAccountResourceTest {
 
     @BeforeAll
     static void jsonMapper() {
-        RestAssured.config =
-            RestAssured.config().objectMapperConfig(objectMapperConfig().defaultObjectMapper(TestUtil.jsonbObjectMapper()));
+        RestAssured.config = RestAssured.config()
+            .objectMapperConfig(objectMapperConfig().defaultObjectMapper(TestUtil.jsonbObjectMapper()));
     }
 
     @BeforeEach
@@ -96,20 +96,19 @@ public class BankAccountResourceTest {
             .size();
 
         // Create the BankAccount
-        bankAccount =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(bankAccount)
-                .when()
-                .post("/api/bank-accounts")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        bankAccount = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(bankAccount)
+            .when()
+            .post("/api/bank-accounts")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         // Validate the BankAccount in the database
         var bankAccountList = given()
@@ -281,20 +280,19 @@ public class BankAccountResourceTest {
     @Test
     public void updateBankAccount() {
         // Initialize the database
-        bankAccount =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(bankAccount)
-                .when()
-                .post("/api/bank-accounts")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        bankAccount = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(bankAccount)
+            .when()
+            .post("/api/bank-accounts")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         var databaseSizeBeforeUpdate = given()
             .auth()
@@ -410,20 +408,19 @@ public class BankAccountResourceTest {
     @Test
     public void deleteBankAccount() {
         // Initialize the database
-        bankAccount =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(bankAccount)
-                .when()
-                .post("/api/bank-accounts")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        bankAccount = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(bankAccount)
+            .when()
+            .post("/api/bank-accounts")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         var databaseSizeBeforeDelete = given()
             .auth()
@@ -470,20 +467,19 @@ public class BankAccountResourceTest {
     @Test
     public void getAllBankAccounts() {
         // Initialize the database
-        bankAccount =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(bankAccount)
-                .when()
-                .post("/api/bank-accounts")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        bankAccount = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(bankAccount)
+            .when()
+            .post("/api/bank-accounts")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         // Get all the bankAccountList
         given()
@@ -504,20 +500,19 @@ public class BankAccountResourceTest {
     @Test
     public void getBankAccount() {
         // Initialize the database
-        bankAccount =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(bankAccount)
-                .when()
-                .post("/api/bank-accounts")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        bankAccount = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(bankAccount)
+            .when()
+            .post("/api/bank-accounts")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         var response = // Get the bankAccount
             given()

@@ -37,8 +37,8 @@ public class LabelResourceTest {
 
     @BeforeAll
     static void jsonMapper() {
-        RestAssured.config =
-            RestAssured.config().objectMapperConfig(objectMapperConfig().defaultObjectMapper(TestUtil.jsonbObjectMapper()));
+        RestAssured.config = RestAssured.config()
+            .objectMapperConfig(objectMapperConfig().defaultObjectMapper(TestUtil.jsonbObjectMapper()));
     }
 
     @BeforeEach
@@ -91,20 +91,19 @@ public class LabelResourceTest {
             .size();
 
         // Create the Label
-        label =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(label)
-                .when()
-                .post("/api/labels")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        label = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(label)
+            .when()
+            .post("/api/labels")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         // Validate the Label in the database
         var labelList = given()
@@ -226,20 +225,19 @@ public class LabelResourceTest {
     @Test
     public void updateLabel() {
         // Initialize the database
-        label =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(label)
-                .when()
-                .post("/api/labels")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        label = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(label)
+            .when()
+            .post("/api/labels")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         var databaseSizeBeforeUpdate = given()
             .auth()
@@ -353,20 +351,19 @@ public class LabelResourceTest {
     @Test
     public void deleteLabel() {
         // Initialize the database
-        label =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(label)
-                .when()
-                .post("/api/labels")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        label = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(label)
+            .when()
+            .post("/api/labels")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         var databaseSizeBeforeDelete = given()
             .auth()
@@ -413,20 +410,19 @@ public class LabelResourceTest {
     @Test
     public void getAllLabels() {
         // Initialize the database
-        label =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(label)
-                .when()
-                .post("/api/labels")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        label = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(label)
+            .when()
+            .post("/api/labels")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         // Get all the labelList
         given()
@@ -446,20 +442,19 @@ public class LabelResourceTest {
     @Test
     public void getLabel() {
         // Initialize the database
-        label =
-            given()
-                .auth()
-                .preemptive()
-                .oauth2(adminToken)
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .body(label)
-                .when()
-                .post("/api/labels")
-                .then()
-                .statusCode(CREATED.getStatusCode())
-                .extract()
-                .as(ENTITY_TYPE);
+        label = given()
+            .auth()
+            .preemptive()
+            .oauth2(adminToken)
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .body(label)
+            .when()
+            .post("/api/labels")
+            .then()
+            .statusCode(CREATED.getStatusCode())
+            .extract()
+            .as(ENTITY_TYPE);
 
         var response = // Get the label
             given()

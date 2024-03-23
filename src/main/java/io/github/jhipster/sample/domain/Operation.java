@@ -118,7 +118,9 @@ public class Operation extends PanacheEntityBase implements Serializable {
     }
 
     public static Optional<Operation> findOneWithEagerRelationships(Long id) {
-        return find("select operation from Operation operation left join fetch operation.labels where operation.id =?1", id)
-            .firstResultOptional();
+        return find(
+            "select operation from Operation operation left join fetch operation.labels where operation.id =?1",
+            id
+        ).firstResultOptional();
     }
 }

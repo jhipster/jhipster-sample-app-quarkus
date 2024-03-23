@@ -44,17 +44,16 @@ public final class PaginationUtil {
     }
 
     private static String prepareLink(UriInfo uriInfo, long pageNumber, long pageSize, String relType) {
-        return Link
-            .fromUri(
-                uriInfo
-                    .getRequestUriBuilder()
-                    .replaceQueryParam("page", pageNumber)
-                    .replaceQueryParam("size", pageSize)
-                    .buildFromEncoded()
-                    .toString()
-                    .replace(",", "%2C")
-                    .replace(";", "%3B")
-            )
+        return Link.fromUri(
+            uriInfo
+                .getRequestUriBuilder()
+                .replaceQueryParam("page", pageNumber)
+                .replaceQueryParam("size", pageSize)
+                .buildFromEncoded()
+                .toString()
+                .replace(",", "%2C")
+                .replace(";", "%3B")
+        )
             .rel(relType)
             .build()
             .toString();

@@ -76,8 +76,7 @@ public class JHipsterMetricsEndpoint {
     private Map<String, Number> processMetrics() {
         Map<String, Number> resultsProcess = new HashMap<>();
 
-        Collection<Gauge> gauges = Search
-            .in(this.meterRegistry)
+        Collection<Gauge> gauges = Search.in(this.meterRegistry)
             .name(s -> s.contains("cpu") || s.contains("system") || s.contains("process"))
             .gauges();
         gauges.forEach(gauge -> resultsProcess.put(gauge.getId().getName(), gauge.value()));
@@ -113,8 +112,7 @@ public class JHipsterMetricsEndpoint {
         Collection<Gauge> gauges = Search.in(this.meterRegistry).name(s -> s.contains("jvm.gc") && !s.contains("jvm.gc.pause")).gauges();
         gauges.forEach(gauge -> resultsGarbageCollector.put(gauge.getId().getName(), gauge.value()));
 
-        Collection<Counter> counters = Search
-            .in(this.meterRegistry)
+        Collection<Counter> counters = Search.in(this.meterRegistry)
             .name(s -> s.contains("jvm.gc") && !s.contains("jvm.gc.pause"))
             .counters();
         counters.forEach(counter -> resultsGarbageCollector.put(counter.getId().getName(), counter.count()));
@@ -123,8 +121,7 @@ public class JHipsterMetricsEndpoint {
         Double classesLoaded = gauges.stream().map(Gauge::value).reduce((x, y) -> (x + y)).orElse((double) 0);
         resultsGarbageCollector.put("classesLoaded", classesLoaded);
 
-        Collection<FunctionCounter> functionCounters = Search
-            .in(this.meterRegistry)
+        Collection<FunctionCounter> functionCounters = Search.in(this.meterRegistry)
             .name(s -> s.contains("jvm.classes.unloaded"))
             .functionCounters();
         Double classesUnloaded = functionCounters.stream().map(FunctionCounter::count).reduce((x, y) -> (x + y)).orElse((double) 0);

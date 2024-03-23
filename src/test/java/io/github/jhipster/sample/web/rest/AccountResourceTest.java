@@ -68,8 +68,8 @@ public class AccountResourceTest {
 
     @BeforeAll
     static void jsonMapper() {
-        RestAssured.config =
-            RestAssured.config().objectMapperConfig(objectMapperConfig().defaultObjectMapper(TestUtil.jsonbObjectMapper()));
+        RestAssured.config = RestAssured.config()
+            .objectMapperConfig(objectMapperConfig().defaultObjectMapper(TestUtil.jsonbObjectMapper()));
     }
 
     private void registerUser(ManagedUserVM user) {

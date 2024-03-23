@@ -85,11 +85,9 @@ public class BankAccountResource {
     @Transactional
     public Response deleteBankAccount(@PathParam("id") Long id) {
         log.debug("REST request to delete BankAccount : {}", id);
-        BankAccount
-            .findByIdOptional(id)
-            .ifPresent(bankAccount -> {
-                bankAccount.delete();
-            });
+        BankAccount.findByIdOptional(id).ifPresent(bankAccount -> {
+            bankAccount.delete();
+        });
         var response = Response.noContent();
         HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()).forEach(response::header);
         return response.build();

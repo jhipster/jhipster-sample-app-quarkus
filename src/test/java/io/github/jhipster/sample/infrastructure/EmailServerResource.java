@@ -25,11 +25,10 @@ public class EmailServerResource implements QuarkusTestResourceLifecycleManager,
 
     @Override
     public Map<String, String> start() {
-        container =
-            new GenericContainer<>("mailhog/mailhog")
-                .withExposedPorts(1025, 8025)
-                .withLogConsumer(outputFrame -> {})
-                .waitingFor(Wait.forHttp("/").forPort(8025));
+        container = new GenericContainer<>("mailhog/mailhog")
+            .withExposedPorts(1025, 8025)
+            .withLogConsumer(outputFrame -> {})
+            .waitingFor(Wait.forHttp("/").forPort(8025));
 
         containerNetworkId.ifPresent(container::withNetworkMode);
         container.start();

@@ -25,8 +25,7 @@ public class JHipsterLoggersEndpoint {
     public LoggersWrapper getLoggers() {
         Enumeration<String> loggerNames = LogManager.getLogManager().getLoggerNames();
 
-        Map<String, LoggerVM> loggers = Collections
-            .list(loggerNames)
+        Map<String, LoggerVM> loggers = Collections.list(loggerNames)
             .stream()
             .filter(name -> !name.isBlank())
             .map(this::getLogger)

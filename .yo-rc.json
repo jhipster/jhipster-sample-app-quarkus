@@ -6,7 +6,7 @@
     "blueprints": [
       {
         "name": "generator-jhipster-quarkus",
-        "version": "3.0.0"
+        "version": "3.1.0"
       }
     ],
     "buildTool": "maven",
@@ -30,7 +30,7 @@
     "entitySuffix": "",
     "hibernateCache": "ehcache",
     "jhiPrefix": "jhi",
-    "jhipsterVersion": "8.1.0",
+    "jhipsterVersion": "8.2.1",
     "jwtSecretKey": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
     "languages": ["en"],
     "messageBroker": false,

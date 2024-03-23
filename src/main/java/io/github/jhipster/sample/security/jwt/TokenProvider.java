@@ -43,8 +43,12 @@ public class TokenProvider {
         this.key = readPrivateKey(jHipsterProperties.security().authentication().jwt().privateKey().location());
         this.issuer = jHipsterProperties.security().authentication().jwt().issuer();
         this.tokenValidityInMilliseconds = jHipsterProperties.security().authentication().jwt().tokenValidityInSeconds() * 1000;
-        this.tokenValidityInMillisecondsForRememberMe =
-            jHipsterProperties.security().authentication().jwt().tokenValidityInSecondsForRememberMe() * 1000;
+        this.tokenValidityInMillisecondsForRememberMe = jHipsterProperties
+            .security()
+            .authentication()
+            .jwt()
+            .tokenValidityInSecondsForRememberMe() *
+        1000;
     }
 
     @PostConstruct
