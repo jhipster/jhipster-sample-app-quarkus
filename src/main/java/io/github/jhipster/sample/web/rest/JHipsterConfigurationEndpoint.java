@@ -3,7 +3,7 @@ package io.github.jhipster.sample.web.rest;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.web.rest.vm.ConfigPropsVM;
 import io.github.jhipster.sample.web.rest.vm.EnvVM;
-import io.quarkus.runtime.configuration.ProfileManager;
+import io.quarkus.runtime.configuration.ConfigUtils;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.GET;
@@ -37,6 +37,6 @@ public class JHipsterConfigurationEndpoint {
             .map(configSource -> new EnvVM.PropertySource(configSource.getName(), configSource.getProperties()))
             .collect(Collectors.toList());
 
-        return new EnvVM(List.of(ProfileManager.getActiveProfile()), propertySources);
+        return new EnvVM(ConfigUtils.getProfiles(), propertySources);
     }
 }

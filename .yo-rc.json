@@ -2,11 +2,12 @@
   "generator-jhipster": {
     "applicationType": "monolith",
     "authenticationType": "jwt",
+    "backendType": "Quarkus",
     "baseName": "jhipsterSampleApplication",
     "blueprints": [
       {
         "name": "generator-jhipster-quarkus",
-        "version": "3.1.0"
+        "version": "3.3.0"
       }
     ],
     "buildTool": "maven",
@@ -30,7 +31,7 @@
     "entitySuffix": "",
     "hibernateCache": "ehcache",
     "jhiPrefix": "jhi",
-    "jhipsterVersion": "8.2.1",
+    "jhipsterVersion": "8.7.3",
     "jwtSecretKey": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
     "languages": ["en"],
     "messageBroker": false,

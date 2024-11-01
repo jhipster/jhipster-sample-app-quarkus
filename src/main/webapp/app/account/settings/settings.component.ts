@@ -1,5 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 import SharedModule from 'app/shared/shared.module';
@@ -10,8 +10,8 @@ import { LANGUAGES } from 'app/config/language.constants';
 const initialAccount: Account = {} as Account;
 
 @Component({
-  selector: 'jhi-settings',
   standalone: true,
+  selector: 'jhi-settings',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
   templateUrl: './settings.component.html',
 })
@@ -40,8 +40,8 @@ export default class SettingsComponent implements OnInit {
     login: new FormControl(initialAccount.login, { nonNullable: true }),
   });
 
-  private accountService = inject(AccountService);
-  private translateService = inject(TranslateService);
+  private readonly accountService = inject(AccountService);
+  private readonly translateService = inject(TranslateService);
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => {

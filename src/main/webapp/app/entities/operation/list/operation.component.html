@@ -4,7 +4,7 @@
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
         <span jhiTranslate="jhipsterSampleApplicationApp.operation.home.refreshListLabel">Refresh list</span>
       </button>
 
@@ -73,7 +73,7 @@
           </tr>
         </thead>
         <tbody infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0">
-          @for (operation of operations; track trackId) {
+          @for (operation of operations; track trackId(operation)) {
             <tr data-cy="entityTable">
               <td>
                 <a [routerLink]="['/operation', operation.id, 'view']">{{ operation.id }}</a>

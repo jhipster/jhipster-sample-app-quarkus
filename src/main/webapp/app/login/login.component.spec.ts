@@ -1,11 +1,10 @@
 jest.mock('app/core/auth/account.service');
 jest.mock('app/login/login.service');
 
-import { ElementRef } from '@angular/core';
+import { ElementRef, signal } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { Router, Navigation } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Navigation, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -22,7 +21,7 @@ describe('LoginComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), LoginComponent],
+      imports: [LoginComponent],
       providers: [
         FormBuilder,
         AccountService,
@@ -91,7 +90,7 @@ describe('LoginComponent', () => {
       const node = {
         focus: jest.fn(),
       };
-      comp.username = new ElementRef(node);
+      comp.username = signal<ElementRef>(new ElementRef(node));
 
       // WHEN
       comp.ngAfterViewInit();

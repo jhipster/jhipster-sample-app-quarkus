@@ -1,5 +1,5 @@
-import { Component, ViewChild, OnInit, AfterViewInit, ElementRef, inject, signal } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
@@ -7,14 +7,13 @@ import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
-  selector: 'jhi-login',
   standalone: true,
+  selector: 'jhi-login',
   imports: [SharedModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
 })
 export default class LoginComponent implements OnInit, AfterViewInit {
-  @ViewChild('username', { static: false })
-  username!: ElementRef;
+  username = viewChild.required<ElementRef>('username');
 
   authenticationError = signal(false);
 
@@ -24,9 +23,9 @@ export default class LoginComponent implements OnInit, AfterViewInit {
     rememberMe: new FormControl(false, { nonNullable: true, validators: [Validators.required] }),
   });
 
-  private accountService = inject(AccountService);
-  private loginService = inject(LoginService);
-  private router = inject(Router);
+  private readonly accountService = inject(AccountService);
+  private readonly loginService = inject(LoginService);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     // if already authenticated then navigate to home page
@@ -38,7 +37,7 @@ export default class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.username.nativeElement.focus();
+    this.username().nativeElement.focus();
   }
 
   login(): void {

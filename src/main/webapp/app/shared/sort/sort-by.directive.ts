@@ -1,6 +1,6 @@
-import { ContentChild, Directive, Host, HostListener, Input, effect } from '@angular/core';
+import { Directive, HostListener, Input, contentChild, effect, inject } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faSort, faSortDown, faSortUp, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 
 import { SortDirective } from './sort.directive';
 
@@ -11,30 +11,31 @@ import { SortDirective } from './sort.directive';
 export class SortByDirective {
   @Input() jhiSortBy!: string;
 
-  @ContentChild(FaIconComponent, { static: false })
-  iconComponent?: FaIconComponent;
+  iconComponent = contentChild(FaIconComponent);
 
   protected sortIcon = faSort;
   protected sortAscIcon = faSortUp;
   protected sortDescIcon = faSortDown;
 
-  constructor(@Host() private sort: SortDirective) {
+  private readonly sort = inject(SortDirective, { host: true });
+
+  constructor() {
     effect(() => {
-      if (this.iconComponent) {
+      if (this.iconComponent()) {
         let icon: IconDefinition = this.sortIcon;
         const { predicate, order } = this.sort.sortState();
         if (predicate === this.jhiSortBy && order !== undefined) {
           icon = order === 'asc' ? this.sortAscIcon : this.sortDescIcon;
         }
-        this.iconComponent.icon = icon.iconName;
-        this.iconComponent.render();
+        this.iconComponent()!.icon = icon.iconName;
+        this.iconComponent()!.render();
       }
     });
   }
 
   @HostListener('click')
   onClick(): void {
-    if (this.iconComponent) {
+    if (this.iconComponent()) {
       this.sort.sort(this.jhiSortBy);
     }
   }

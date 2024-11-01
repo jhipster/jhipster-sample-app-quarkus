@@ -2,9 +2,10 @@ package io.github.jhipster.sample.service;
 
 import io.github.jhipster.sample.config.JHipsterProperties;
 import io.github.jhipster.sample.service.dto.ManagementInfoDTO;
-import io.quarkus.runtime.configuration.ProfileManager;
+import io.quarkus.runtime.configuration.ConfigUtils;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import java.util.StringJoiner;
 
 /**
  * Provides information for management/info resource
@@ -24,8 +25,10 @@ public class ManagementInfoService {
         if (jHipsterProperties.info().swagger().enable()) {
             info.activeProfiles.add("swagger");
         }
-        info.activeProfiles.add(ProfileManager.getActiveProfile());
-        info.displayRibbonOnProfiles = ProfileManager.getActiveProfile();
+        info.activeProfiles.addAll(ConfigUtils.getProfiles());
+        var joiner = new StringJoiner(",");
+        ConfigUtils.getProfiles().forEach(joiner::add);
+        info.displayRibbonOnProfiles = joiner.toString();
         return info;
     }
 }

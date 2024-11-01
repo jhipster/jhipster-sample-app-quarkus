@@ -1,6 +1,6 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 
 import MetricsComponent from './metrics.component';
@@ -15,7 +15,8 @@ describe('MetricsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MetricsComponent],
+      imports: [MetricsComponent],
+      providers: [provideHttpClient()],
     })
       .overrideTemplate(MetricsComponent, '')
       .compileComponents();
@@ -58,52 +59,6 @@ describe('MetricsComponent', () => {
       expect(comp.threads()).toEqual(threadDump.threads);
       expect(comp.updatingMetrics()).toBeFalsy();
       expect(changeDetector.constructor.prototype.markForCheck).toHaveBeenCalled();
-    });
-  });
-
-  describe('metricsKeyExists', () => {
-    it('should check that metrics key exists', () => {
-      // GIVEN
-      comp.metrics.set({
-        garbageCollector: {
-          'PS Scavenge': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-          'PS MarkSweep': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-        },
-      } as unknown as Metrics);
-
-      // WHEN
-      const garbageCollectorKeyExists = comp.metricsKeyExists('garbageCollector');
-
-      // THEN
-      expect(garbageCollectorKeyExists).toBeTruthy();
-    });
-
-    it('should check that metrics key does not exist', () => {
-      // GIVEN
-      comp.metrics.set({
-        garbageCollector: {
-          'PS Scavenge': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-          'PS MarkSweep': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-        },
-      } as unknown as Metrics);
-
-      // WHEN
-      const databasesCollectorKeyExists = comp.metricsKeyExists('databases');
-
-      // THEN
-      expect(databasesCollectorKeyExists).toBeFalsy();
     });
   });
 

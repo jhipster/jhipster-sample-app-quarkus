@@ -1,6 +1,7 @@
 import { ApplicationConfig, LOCALE_ID, importProvidersFrom, inject } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import {
+  NavigationError,
   Router,
   RouterFeatures,
   TitleStrategy,
@@ -8,10 +9,9 @@ import {
   withComponentInputBinding,
   withDebugTracing,
   withNavigationErrorHandler,
-  NavigationError,
 } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
@@ -24,7 +24,7 @@ import routes from './app.routes';
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
 
-const routerFeatures: Array<RouterFeatures> = [
+const routerFeatures: RouterFeatures[] = [
   withComponentInputBinding(),
   withNavigationErrorHandler((e: NavigationError) => {
     const router = inject(Router);
@@ -50,7 +50,7 @@ export const appConfig: ApplicationConfig = {
     // Set this to true to enable service worker (PWA)
     importProvidersFrom(ServiceWorkerModule.register('ngsw-worker.js', { enabled: false })),
     importProvidersFrom(TranslationModule),
-    importProvidersFrom(HttpClientModule),
+    provideHttpClient(withInterceptorsFromDi()),
     Title,
     { provide: LOCALE_ID, useValue: 'en' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },

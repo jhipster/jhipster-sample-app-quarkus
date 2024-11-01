@@ -2,10 +2,9 @@
 name: jhipstersampleapplication
 services:
   mysql:
-    image: mysql:8.3.0
+    image: mysql:9.1.0
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
-    #   - ~/volumes/jhipster/jhipsterSampleApplication/mysql/:/var/lib/mysql/
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhipstersampleapplication
@@ -13,9 +12,9 @@ services:
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:3306:3306
-    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+    command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
-      test: ['CMD', 'mysql', '-e', 'SHOW DATABASES;']
+      test: ['CMD-SHELL', 'mysql -e "SHOW DATABASES;" && sleep 5']
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10

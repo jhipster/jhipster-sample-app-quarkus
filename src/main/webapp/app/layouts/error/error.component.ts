@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -15,8 +15,8 @@ export default class ErrorComponent implements OnInit, OnDestroy {
   errorKey?: string;
   langChangeSubscription?: Subscription;
 
-  private translateService = inject(TranslateService);
-  private route = inject(ActivatedRoute);
+  private readonly translateService = inject(TranslateService);
+  private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.data.subscribe(routeData => {

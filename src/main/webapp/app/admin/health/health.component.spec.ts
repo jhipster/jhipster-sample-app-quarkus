@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpErrorResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { of, throwError } from 'rxjs';
 
 import HealthComponent from './health.component';
@@ -14,7 +14,8 @@ describe('HealthComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, HealthComponent],
+      imports: [HealthComponent],
+      providers: [provideHttpClientTesting(), provideHttpClient()],
     })
       .overrideTemplate(HealthComponent, '')
       .compileComponents();
@@ -52,7 +53,7 @@ describe('HealthComponent', () => {
     it('should handle a 503 on refreshing health data', () => {
       // GIVEN
       const health: Health = { status: 'DOWN', checks: [{ name: 'database check', status: 'DOWN' }] };
-      jest.spyOn(service, 'checkHealth').mockReturnValue(throwError(new HttpErrorResponse({ status: 503, error: health })));
+      jest.spyOn(service, 'checkHealth').mockReturnValue(throwError(() => new HttpErrorResponse({ status: 503, error: health })));
 
       // WHEN
       comp.refresh();

@@ -1,10 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { of, Subject, from } from 'rxjs';
+import { Subject, from, of } from 'rxjs';
 
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/service/user.service';
@@ -24,8 +22,9 @@ describe('BankAccount Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]), BankAccountUpdateComponent],
+      imports: [BankAccountUpdateComponent],
       providers: [
+        provideHttpClient(),
         FormBuilder,
         {
           provide: ActivatedRoute,
@@ -50,10 +49,10 @@ describe('BankAccount Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call User query and add missing value', () => {
       const bankAccount: IBankAccount = { id: 456 };
-      const user: IUser = { id: 23912 };
+      const user: IUser = { id: 9492 };
       bankAccount.user = user;
 
-      const userCollection: IUser[] = [{ id: 8940 }];
+      const userCollection: IUser[] = [{ id: 12660 }];
       jest.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
       const additionalUsers = [user];
       const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
@@ -72,7 +71,7 @@ describe('BankAccount Management Update Component', () => {
 
     it('Should update editForm', () => {
       const bankAccount: IBankAccount = { id: 456 };
-      const user: IUser = { id: 25052 };
+      const user: IUser = { id: 11951 };
       bankAccount.user = user;
 
       activatedRoute.data = of({ bankAccount });

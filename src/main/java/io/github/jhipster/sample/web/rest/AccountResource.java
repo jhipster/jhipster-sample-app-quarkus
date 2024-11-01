@@ -82,8 +82,8 @@ public class AccountResource {
     @POST
     @Path("/account")
     public Response saveAccount(@Valid UserDTO userDTO, @Context SecurityContext ctx) {
-        var userLogin = Optional.ofNullable(ctx.getUserPrincipal().getName()).orElseThrow(
-            () -> new AccountResourceException("Current user login not found")
+        var userLogin = Optional.ofNullable(ctx.getUserPrincipal().getName()).orElseThrow(() ->
+            new AccountResourceException("Current user login not found")
         );
         var existingUser = User.findOneByEmailIgnoreCase(userDTO.email);
         if (existingUser.isPresent() && (!existingUser.get().login.equalsIgnoreCase(userLogin))) {
@@ -162,8 +162,8 @@ public class AccountResource {
     @POST
     @Path("/account/change-password")
     public Response changePassword(PasswordChangeDTO passwordChangeDto, @Context SecurityContext ctx) {
-        var userLogin = Optional.ofNullable(ctx.getUserPrincipal().getName()).orElseThrow(
-            () -> new AccountResourceException("Current user login not found")
+        var userLogin = Optional.ofNullable(ctx.getUserPrincipal().getName()).orElseThrow(() ->
+            new AccountResourceException("Current user login not found")
         );
         if (!checkPasswordLength(passwordChangeDto.newPassword)) {
             throw new InvalidPasswordWebException();

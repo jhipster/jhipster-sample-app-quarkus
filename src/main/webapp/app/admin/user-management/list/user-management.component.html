@@ -1,10 +1,10 @@
 <div>
   <h2>
-    <span id="user-management-page-heading" jhiTranslate="userManagement.home.title" data-cy="userManagementPageHeading">Users</span>
+    <span id="user-management-page-heading" data-cy="userManagementPageHeading" jhiTranslate="userManagement.home.title">Users</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
-        <fa-icon icon="sync" [spin]="isLoading()"></fa-icon>
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined"></fa-icon>
         <span jhiTranslate="userManagement.home.refreshListLabel">Refresh list</span>
       </button>
       <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
@@ -43,7 +43,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (user of users(); track trackIdentity) {
+          @for (user of users(); track trackIdentity(user)) {
             <tr>
               <td>
                 <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>

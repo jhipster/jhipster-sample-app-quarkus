@@ -26,5 +26,6 @@
       "relationshipSide": "right",
       "relationshipType": "many-to-many"
     }
-  ]
+  ],
+  "searchEngine": "no"
 }

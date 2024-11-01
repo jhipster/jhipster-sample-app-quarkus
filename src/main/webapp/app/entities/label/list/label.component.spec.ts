@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { of, Subject } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { sampleWithRequiredData } from '../label.test-samples';
@@ -20,8 +18,9 @@ describe('Label Management Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([{ path: 'label', component: LabelComponent }]), HttpClientTestingModule, LabelComponent],
+      imports: [LabelComponent],
       providers: [
+        provideHttpClient(),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -92,7 +91,7 @@ describe('Label Management Component', () => {
     it('Should forward to labelService', () => {
       const entity = { id: 123 };
       jest.spyOn(service, 'getLabelIdentifier');
-      const id = comp.trackId(0, entity);
+      const id = comp.trackId(entity);
       expect(service.getLabelIdentifier).toHaveBeenCalledWith(entity);
       expect(id).toBe(entity.id);
     });

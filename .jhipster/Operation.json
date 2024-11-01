@@ -44,5 +44,6 @@
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
     }
-  ]
+  ],
+  "searchEngine": "no"
 }

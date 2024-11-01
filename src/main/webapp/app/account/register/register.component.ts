@@ -1,7 +1,7 @@
-import { Component, AfterViewInit, ElementRef, inject, ViewChild, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
@@ -10,14 +10,13 @@ import PasswordStrengthBarComponent from '../password/password-strength-bar/pass
 import { RegisterService } from './register.service';
 
 @Component({
-  selector: 'jhi-register',
   standalone: true,
+  selector: 'jhi-register',
   imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
   templateUrl: './register.component.html',
 })
 export default class RegisterComponent implements AfterViewInit {
-  @ViewChild('login', { static: false })
-  login?: ElementRef;
+  login = viewChild.required<ElementRef>('login');
 
   doNotMatch = signal(false);
   error = signal(false);
@@ -49,13 +48,11 @@ export default class RegisterComponent implements AfterViewInit {
     }),
   });
 
-  private translateService = inject(TranslateService);
-  private registerService = inject(RegisterService);
+  private readonly translateService = inject(TranslateService);
+  private readonly registerService = inject(RegisterService);
 
   ngAfterViewInit(): void {
-    if (this.login) {
-      this.login.nativeElement.focus();
-    }
+    this.login().nativeElement.focus();
   }
 
   register(): void {

@@ -1,5 +1,5 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpErrorResponse, HttpHandler, HttpEvent } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -7,7 +7,7 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 
 @Injectable()
 export class ErrorHandlerInterceptor implements HttpInterceptor {
-  private eventManager = inject(EventManager);
+  private readonly eventManager = inject(EventManager);
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(

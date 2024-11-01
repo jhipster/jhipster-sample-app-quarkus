@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { of, Subject } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { sampleWithRequiredData } from '../bank-account.test-samples';
@@ -20,12 +18,9 @@ describe('BankAccount Management Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([{ path: 'bank-account', component: BankAccountComponent }]),
-        HttpClientTestingModule,
-        BankAccountComponent,
-      ],
+      imports: [BankAccountComponent],
       providers: [
+        provideHttpClient(),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -96,7 +91,7 @@ describe('BankAccount Management Component', () => {
     it('Should forward to bankAccountService', () => {
       const entity = { id: 123 };
       jest.spyOn(service, 'getBankAccountIdentifier');
-      const id = comp.trackId(0, entity);
+      const id = comp.trackId(entity);
       expect(service.getBankAccountIdentifier).toHaveBeenCalledWith(entity);
       expect(id).toBe(entity.id);
     });

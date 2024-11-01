@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { RouterTestingHarness, RouterTestingModule } from '@angular/router/testing';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { BankAccountDetailComponent } from './bank-account-detail.component';
@@ -11,13 +11,13 @@ describe('BankAccount Management Detail Component', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BankAccountDetailComponent, RouterTestingModule.withRoutes([], { bindToComponentInputs: true })],
+      imports: [BankAccountDetailComponent],
       providers: [
         provideRouter(
           [
             {
               path: '**',
-              component: BankAccountDetailComponent,
+              loadComponent: () => import('./bank-account-detail.component').then(m => m.BankAccountDetailComponent),
               resolve: { bankAccount: () => of({ id: 123 }) },
             },
           ],
@@ -40,7 +40,7 @@ describe('BankAccount Management Detail Component', () => {
       const instance = await harness.navigateByUrl('/', BankAccountDetailComponent);
 
       // THEN
-      expect(instance.bankAccount).toEqual(expect.objectContaining({ id: 123 }));
+      expect(instance.bankAccount()).toEqual(expect.objectContaining({ id: 123 }));
     });
   });
 

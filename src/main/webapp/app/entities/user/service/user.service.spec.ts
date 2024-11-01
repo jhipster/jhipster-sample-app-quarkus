@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 import { IUser } from '../user.model';
-import { sampleWithRequiredData, sampleWithPartialData, sampleWithFullData } from '../user.test-samples';
+import { sampleWithFullData, sampleWithPartialData, sampleWithRequiredData } from '../user.test-samples';
 
 import { UserService } from './user.service';
 
@@ -17,7 +18,7 @@ describe('User Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     });
     expectedResult = null;
     service = TestBed.inject(UserService);

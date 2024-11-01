@@ -1,5 +1,5 @@
-import { Component, inject, OnInit, AfterViewInit, ElementRef, ViewChild, signal } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import PasswordStrengthBarComponent from 'app/account/password/password-strength-bar/password-strength-bar.component';
 import SharedModule from 'app/shared/shared.module';
@@ -7,14 +7,13 @@ import SharedModule from 'app/shared/shared.module';
 import { PasswordResetFinishService } from './password-reset-finish.service';
 
 @Component({
-  selector: 'jhi-password-reset-finish',
   standalone: true,
+  selector: 'jhi-password-reset-finish',
   imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
   templateUrl: './password-reset-finish.component.html',
 })
 export default class PasswordResetFinishComponent implements OnInit, AfterViewInit {
-  @ViewChild('newPassword', { static: false })
-  newPassword?: ElementRef;
+  newPassword = viewChild.required<ElementRef>('newPassword');
 
   initialized = signal(false);
   doNotMatch = signal(false);
@@ -33,22 +32,20 @@ export default class PasswordResetFinishComponent implements OnInit, AfterViewIn
     }),
   });
 
-  private passwordResetFinishService = inject(PasswordResetFinishService);
-  private route = inject(ActivatedRoute);
+  private readonly passwordResetFinishService = inject(PasswordResetFinishService);
+  private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      if (params['key']) {
-        this.key.set(params['key']);
+      if (params.key) {
+        this.key.set(params.key);
       }
       this.initialized.set(true);
     });
   }
 
   ngAfterViewInit(): void {
-    if (this.newPassword) {
-      this.newPassword.nativeElement.focus();
-    }
+    this.newPassword().nativeElement.focus();
   }
 
   finishReset(): void {
