@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'graalvm'
-          java-version: '17'
+          java-version: '21'
       - name: Stop MySQL server
         run: sudo /etc/init.d/mysql stop
       - name: Install node.js packages
