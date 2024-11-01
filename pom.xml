@@ -7,7 +7,7 @@
     <artifactId>jhipster-sample-application</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Jhipster Sample Application</name>
+    <name>JHipster Sample Application</name>
 
     <properties>
         <!-- Build properties -->
