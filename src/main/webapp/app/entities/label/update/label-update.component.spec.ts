@@ -44,7 +44,7 @@ describe('Label Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should update editForm', () => {
-      const label: ILabel = { id: 456 };
+      const label: ILabel = { id: 7351 };
 
       activatedRoute.data = of({ label });
       comp.ngOnInit();
@@ -57,7 +57,7 @@ describe('Label Management Update Component', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<ILabel>>();
-      const label = { id: 123 };
+      const label = { id: 4199 };
       jest.spyOn(labelFormService, 'getLabel').mockReturnValue(label);
       jest.spyOn(labelService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -80,7 +80,7 @@ describe('Label Management Update Component', () => {
     it('Should call create service on save for new entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<ILabel>>();
-      const label = { id: 123 };
+      const label = { id: 4199 };
       jest.spyOn(labelFormService, 'getLabel').mockReturnValue({ id: null });
       jest.spyOn(labelService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -103,7 +103,7 @@ describe('Label Management Update Component', () => {
     it('Should set isSaving to false on error', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<ILabel>>();
-      const label = { id: 123 };
+      const label = { id: 4199 };
       jest.spyOn(labelService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ label });
