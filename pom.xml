@@ -17,8 +17,8 @@
 
         <maven.version>3.9.4</maven.version>
         <java.version>17</java.version>
-        <node.version>v22.13.1</node.version>
-        <npm.version>11.1.0</npm.version>
+        <node.version>v22.14.0</node.version>
+        <npm.version>11.2.0</npm.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
